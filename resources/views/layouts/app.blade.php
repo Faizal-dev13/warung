@@ -24,7 +24,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="{{ asset('css/store.css') }}">
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-white">
+<body class="bg-[#F8FAFC] text-slate-900 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-white">
     @php
         $cart = $cart ?? ['items' => [], 'count' => 0, 'subtotal' => 0, 'subtotal_formatted' => 'Rp0'];
     @endphp
@@ -32,25 +32,25 @@
     <div class="fixed inset-x-0 top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
             <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                <span class="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white shadow-soft transition group-hover:-rotate-3 dark:bg-white dark:text-slate-950">
+                <span class="grid h-11 w-11 place-items-center rounded-2xl bg-teal-700 text-white shadow-soft shadow-teal-700/15 transition group-hover:-rotate-3 dark:bg-teal-500 dark:text-white">
                     <i class="ph-bold ph-cube-transparent text-2xl"></i>
                 </span>
                 <span>
                     <span class="block text-lg font-extrabold tracking-tight">{{ config('store.name') }}</span>
-                    <span class="hidden text-xs text-slate-500 dark:text-slate-400 sm:block">Produk digital siap checkout WA</span>
+                    <span class="hidden text-xs text-slate-500 dark:text-slate-400 sm:block">Produk pilihan siap dipesan</span>
                 </span>
             </a>
 
             <div class="hidden items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300 md:flex">
-                <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#produk">Produk</a>
-                <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#voucher">Voucher</a>
-                <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('guide') }}">Panduan</a>
+                <a class="hover:text-teal-700 dark:hover:text-teal-300" href="{{ route('home') }}#produk">Produk</a>
+                <a class="hover:text-teal-700 dark:hover:text-teal-300" href="{{ route('home') }}#voucher">Voucher</a>
+                <a class="hover:text-teal-700 dark:hover:text-teal-300" href="{{ route('guide') }}">Panduan</a>
             </div>
 
             <div class="flex items-center gap-2">
                 <button type="button" data-cart-toggle class="relative grid h-11 w-11 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-white/10 dark:text-white" aria-label="Buka keranjang">
                     <i class="ph ph-shopping-cart-simple text-xl"></i>
-                    <span data-cart-count-badge class="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-rose-500 px-1 text-xs font-bold text-white {{ ($cart['count'] ?? 0) > 0 ? '' : 'hidden' }}">{{ $cart['count'] ?? 0 }}</span>
+                    <span data-cart-count-badge class="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-amber-500 px-1 text-xs font-bold text-white {{ ($cart['count'] ?? 0) > 0 ? '' : 'hidden' }}">{{ $cart['count'] ?? 0 }}</span>
                 </button>
                 <button type="button" data-theme-toggle class="grid h-11 w-11 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-white/10 dark:text-white" aria-label="Ganti tema">
                     <i class="ph ph-moon-stars text-xl dark:hidden"></i>
@@ -102,10 +102,10 @@
             </div>
             <form action="{{ route('checkout.whatsapp') }}" method="post" class="space-y-3">
                 @csrf
-                <input required name="name" placeholder="Nama Anda" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-950 dark:border-white/10 dark:bg-white/10">
-                <input name="phone" placeholder="No. HP opsional" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-950 dark:border-white/10 dark:bg-white/10">
-                <input name="voucher" placeholder="Kode voucher opsional" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-950 dark:border-white/10 dark:bg-white/10">
-                <textarea name="note" rows="2" placeholder="Catatan opsional" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-950 dark:border-white/10 dark:bg-white/10"></textarea>
+                <input required name="name" placeholder="Nama Anda" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-teal-600 dark:border-white/10 dark:bg-white/10">
+                <input name="phone" placeholder="No. HP opsional" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-teal-600 dark:border-white/10 dark:bg-white/10">
+                <input name="voucher" placeholder="Kode voucher opsional" class="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-teal-600 dark:border-white/10 dark:bg-white/10">
+                <textarea name="note" rows="2" placeholder="Catatan opsional" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-teal-600 dark:border-white/10 dark:bg-white/10"></textarea>
                 <button class="flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-4 font-extrabold text-white shadow-lg shadow-emerald-500/25 transition hover:-translate-y-0.5 hover:bg-emerald-600">
                     <i class="ph-fill ph-whatsapp-logo text-xl"></i> Checkout ke WhatsApp
                 </button>
@@ -118,24 +118,24 @@
         <div class="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 md:grid-cols-4 lg:px-8">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3">
-                    <span class="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950"><i class="ph-bold ph-cube-transparent text-2xl"></i></span>
+                    <span class="grid h-11 w-11 place-items-center rounded-2xl bg-teal-700 text-white dark:bg-teal-500 dark:text-white"><i class="ph-bold ph-cube-transparent text-2xl"></i></span>
                     <strong class="text-lg">{{ config('store.name') }}</strong>
                 </div>
-                <p class="mt-4 max-w-md text-sm leading-7 text-slate-500 dark:text-slate-400">{{ config('store.tagline') }} Pilih produk, masukkan keranjang, lalu checkout ke WhatsApp untuk konfirmasi manual.</p>
+                <p class="mt-4 max-w-md text-sm leading-7 text-slate-500 dark:text-slate-400">{{ config('store.tagline') }} Pilih produk, masukkan keranjang, lalu lanjutkan konfirmasi pesanan melalui WhatsApp.</p>
             </div>
             <div>
                 <h4 class="font-bold">Navigasi</h4>
                 <div class="mt-4 space-y-3 text-sm text-slate-500 dark:text-slate-400">
-                    <a class="block hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#produk">Produk</a>
-                    <a class="block hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#keunggulan">Fitur</a>
-                    <a class="block hover:text-slate-950 dark:hover:text-white" href="{{ route('guide') }}">Panduan</a>
+                    <a class="block hover:text-teal-700 dark:hover:text-teal-300" href="{{ route('home') }}#produk">Produk</a>
+                    <a class="block hover:text-teal-700 dark:hover:text-teal-300" href="{{ route('home') }}#keunggulan">Fitur</a>
+                    <a class="block hover:text-teal-700 dark:hover:text-teal-300" href="{{ route('guide') }}">Panduan</a>
                 </div>
             </div>
             <div>
                 <h4 class="font-bold">Dukungan</h4>
                 <div class="mt-4 space-y-3 text-sm text-slate-500 dark:text-slate-400">
                     <p>Checkout WA</p>
-                    <p>Konfirmasi manual</p>
+                    <p>Konfirmasi pesanan</p>
                     <p>Support setelah pembelian</p>
                 </div>
             </div>

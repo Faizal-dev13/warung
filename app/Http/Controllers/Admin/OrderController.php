@@ -20,24 +20,50 @@ class OrderController extends Controller
 
     public function index(Request $request): View
     {
+        $perPage = $this->perPage($request);
+        $sort = (string) $request->query('sort', 'created_at');
+        $direction = $request->query('direction') === 'asc' ? 'asc' : 'desc';
+
+        $sortable = [
+            'invoice' => 'invoice_number',
+            'customer' => 'customer_name',
+            'items' => 'items_count',
+            'total' => 'total',
+            'status' => 'status',
+            'created_at' => 'created_at',
+        ];
+
+        if (! array_key_exists($sort, $sortable)) {
+            $sort = 'created_at';
+        }
+
         $orders = Order::query()
             ->withCount('items')
-            ->when($request->filled('status'), fn ($query) => $query->where('status', $request->status))
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $search = '%' . $request->search . '%';
-                $query->where(function ($subQuery) use ($search) {
-                    $subQuery->where('invoice_number', 'like', $search)
-                        ->orWhere('customer_name', 'like', $search)
-                        ->orWhere('customer_phone', 'like', $search);
+            ->when(in_array($request->query('status'), self::STATUSES, true), fn ($query) => $query->where('status', $request->query('status')))
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%'.trim((string) $request->query('q')).'%';
+                $query->where(function ($subQuery) use ($keyword) {
+                    $subQuery->where('invoice_number', 'like', $keyword)
+                        ->orWhere('customer_name', 'like', $keyword)
+                        ->orWhere('customer_phone', 'like', $keyword)
+                        ->orWhere('voucher_code', 'like', $keyword);
                 });
             })
-            ->latest()
-            ->paginate(12)
+            ->orderBy($sortable[$sort], $direction)
+            ->orderByDesc('id')
+            ->paginate($perPage)
             ->withQueryString();
 
         return view('admin.orders.index', [
             'orders' => $orders,
             'statuses' => self::STATUSES,
+            'filters' => [
+                'q' => (string) $request->query('q', ''),
+                'status' => (string) $request->query('status', ''),
+                'per_page' => $perPage,
+                'sort' => $sort,
+                'direction' => $direction,
+            ],
         ]);
     }
 
@@ -58,5 +84,12 @@ class OrderController extends Controller
         $order->update($data);
 
         return back()->with('success', 'Status order berhasil diperbarui.');
+    }
+
+    private function perPage(Request $request): int
+    {
+        $perPage = (int) $request->query('per_page', 10);
+
+        return in_array($perPage, [10, 25, 50], true) ? $perPage : 10;
     }
 }

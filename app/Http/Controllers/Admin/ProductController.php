@@ -16,18 +16,53 @@ class ProductController extends Controller
 {
     public function index(Request $request): View
     {
+        $perPage = $this->perPage($request);
+        $sort = (string) $request->query('sort', 'sort_order');
+        $direction = $request->query('direction') === 'desc' ? 'desc' : 'asc';
+
+        $sortable = [
+            'name' => 'name',
+            'category' => 'category_id',
+            'price' => 'price',
+            'sort_order' => 'sort_order',
+            'status' => 'is_active',
+            'created_at' => 'created_at',
+        ];
+
+        if (! array_key_exists($sort, $sortable)) {
+            $sort = 'sort_order';
+        }
+
         $products = Product::query()
             ->with('category')
-            ->when($request->filled('search'), fn ($query) => $query->where('name', 'like', '%' . $request->search . '%'))
-            ->when($request->filled('category_id'), fn ($query) => $query->where('category_id', $request->category_id))
-            ->orderBy('sort_order')
-            ->latest()
-            ->paginate(12)
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%'.trim((string) $request->query('q')).'%';
+                $query->where(function ($subQuery) use ($keyword) {
+                    $subQuery->where('name', 'like', $keyword)
+                        ->orWhere('summary', 'like', $keyword)
+                        ->orWhere('description', 'like', $keyword)
+                        ->orWhere('badge', 'like', $keyword);
+                });
+            })
+            ->when($request->filled('category_id'), fn ($query) => $query->where('category_id', $request->query('category_id')))
+            ->when($request->query('status') === 'active', fn ($query) => $query->where('is_active', true))
+            ->when($request->query('status') === 'inactive', fn ($query) => $query->where('is_active', false))
+            ->orderBy($sortable[$sort], $direction)
+            ->orderByDesc('id')
+            ->paginate($perPage)
             ->withQueryString();
 
         return view('admin.products.index', [
             'products' => $products,
             'categories' => Category::orderBy('name')->get(),
+            'filters' => [
+                'q' => (string) $request->query('q', ''),
+                'category_id' => (string) $request->query('category_id', ''),
+                'status' => (string) $request->query('status', ''),
+                'per_page' => $perPage,
+                'sort' => $sort,
+                'direction' => $direction,
+            ],
         ]);
     }
 
@@ -129,5 +164,12 @@ class ProductController extends Controller
         if ($path && ! str_starts_with($path, 'http') && Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
         }
+    }
+
+    private function perPage(Request $request): int
+    {
+        $perPage = (int) $request->query('per_page', 10);
+
+        return in_array($perPage, [10, 25, 50], true) ? $perPage : 10;
     }
 }

@@ -10,7 +10,7 @@
 </head>
 <body class="min-h-screen bg-slate-950 font-sans text-white">
     <main class="grid min-h-screen place-items-center overflow-hidden p-4">
-        <div class="pointer-events-none fixed -left-24 -top-24 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl"></div>
+        <div class="pointer-events-none fixed -left-24 -top-24 h-72 w-72 rounded-full bg-teal-500/20 blur-3xl"></div>
         <div class="pointer-events-none fixed -bottom-24 -right-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl"></div>
 
         <form method="POST" action="{{ route('admin.login.submit') }}" class="relative w-full max-w-md rounded-[2rem] border border-white/10 bg-white/10 p-6 shadow-2xl backdrop-blur">@csrf

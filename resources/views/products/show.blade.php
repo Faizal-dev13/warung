@@ -22,14 +22,14 @@
 @section('content')
 <section class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12">
     <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <a href="{{ route('home') }}#produk" class="inline-flex w-fit items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-extrabold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-600 hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:border-blue-400/30 dark:hover:text-blue-300">
+        <a href="{{ route('home') }}#produk" class="inline-flex w-fit items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-extrabold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-teal-200 hover:text-teal-600 hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:border-teal-400/30 dark:hover:text-teal-300">
             <span class="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-white">
                 <i class="ph ph-arrow-left"></i>
             </span>
             Kembali ke Katalog
         </a>
 
-        <button data-cart-toggle type="button" class="inline-flex w-fit items-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">
+        <button data-cart-toggle type="button" class="inline-flex w-fit items-center gap-2 rounded-2xl bg-teal-700 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:-translate-y-0.5 hover:shadow-md dark:bg-teal-500 dark:text-white">
             <i class="ph ph-shopping-cart-simple"></i> Cek Keranjang
         </button>
     </div>
@@ -44,7 +44,7 @@
                         <span class="absolute left-4 top-4 rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-sm ring-1 ring-white/70 backdrop-blur dark:bg-slate-950/80 dark:text-white dark:ring-white/10">{{ $product->badge }}</span>
                     @endif
                 @else
-                    <div class="relative flex min-h-[320px] flex-col justify-between overflow-hidden bg-gradient-to-br {{ $product->accent ?: 'from-slate-900 to-blue-900' }} p-7 text-white sm:min-h-[460px] sm:p-8">
+                    <div class="relative flex min-h-[320px] flex-col justify-between overflow-hidden bg-gradient-to-br {{ $product->accent ?: 'from-slate-950 to-teal-800' }} p-7 text-white sm:min-h-[460px] sm:p-8">
                         <div class="absolute -right-16 -top-16 h-60 w-60 rounded-full bg-white/15 blur-3xl"></div>
                         <span class="relative w-fit rounded-full bg-white/20 px-4 py-2 text-sm font-bold backdrop-blur">{{ $product->badge ?? 'Produk Pilihan' }}</span>
                         <i class="ph {{ $product->icon ?: 'ph-package' }} relative text-8xl drop-shadow"></i>
@@ -60,7 +60,7 @@
         <div class="lg:py-4">
             <div class="flex flex-wrap items-center gap-2">
                 @if($product->category)
-                    <span class="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700 dark:bg-blue-400/10 dark:text-blue-300">{{ $product->category->name }}</span>
+                    <span class="rounded-full bg-teal-50 px-3 py-1.5 text-xs font-extrabold text-teal-700 dark:bg-teal-400/10 dark:text-teal-300">{{ $product->category->name }}</span>
                 @endif
                 @if($product->badge)
                     <span class="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-extrabold text-slate-600 dark:bg-white/10 dark:text-slate-300">{{ $product->badge }}</span>
@@ -94,7 +94,7 @@
             <div class="mt-8 grid gap-3 sm:grid-cols-[1fr_auto]">
                 <form action="{{ route('cart.add', $product->slug) }}" method="post" class="min-w-0" data-cart-form data-cart-open="true">
                     @csrf
-                    <button class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-6 py-4 font-extrabold text-white shadow-soft transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-slate-950">
+                    <button class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-700 px-6 py-4 font-extrabold text-white shadow-soft transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-teal-500 dark:text-white">
                         <i class="ph ph-shopping-cart-simple"></i> Tambah ke Keranjang
                     </button>
                 </form>
@@ -110,7 +110,7 @@
 <section class="mx-auto max-w-7xl px-4 pb-24 sm:px-6 md:pb-16 lg:px-8">
     <div class="mb-6 flex items-end justify-between gap-4">
         <div>
-            <p class="text-sm font-extrabold uppercase tracking-wide text-blue-600 dark:text-blue-400">Produk Terkait</p>
+            <p class="text-sm font-extrabold uppercase tracking-wide text-teal-600 dark:text-teal-400">Produk Terkait</p>
             <h2 class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">Pilihan lain yang bisa kamu cek</h2>
         </div>
         <a href="{{ route('home') }}#produk" class="hidden rounded-2xl border border-slate-200 px-5 py-3 text-sm font-extrabold transition hover:bg-white dark:border-white/10 dark:hover:bg-white/10 sm:inline-flex">Lihat Katalog</a>

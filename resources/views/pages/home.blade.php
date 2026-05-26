@@ -77,28 +77,28 @@
         }
 
         .mobile-bottom-link.is-active {
-            background: rgb(15 23 42);
+            background: rgb(15 118 110);
             color: #fff;
-            box-shadow: 0 10px 24px rgba(15, 23, 42, .18);
+            box-shadow: 0 10px 24px rgba(15, 118, 110, .22);
         }
 
         .dark .mobile-bottom-link.is-active {
-            background: #fff;
-            color: rgb(15 23 42);
-            box-shadow: 0 10px 24px rgba(255, 255, 255, .12);
+            background: rgb(20 184 166);
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(20, 184, 166, .20);
         }
 
         .mobile-bottom-action {
             position: relative;
-            border: 1px solid rgba(37, 99, 235, .16);
-            background: linear-gradient(135deg, rgba(37, 99, 235, .1), rgba(6, 182, 212, .12));
-            color: rgb(37 99 235);
+            border: 1px solid rgba(15, 118, 110, .18);
+            background: linear-gradient(135deg, rgba(15, 118, 110, .12), rgba(245, 158, 11, .13));
+            color: rgb(15 118 110);
         }
 
         .dark .mobile-bottom-action {
-            border-color: rgba(96, 165, 250, .22);
-            background: rgba(59, 130, 246, .14);
-            color: rgb(147 197 253);
+            border-color: rgba(45, 212, 191, .24);
+            background: rgba(20, 184, 166, .14);
+            color: rgb(94 234 212);
         }
 
         .mobile-bottom-action:active {
@@ -227,7 +227,7 @@
                             ? (\Illuminate\Support\Str::startsWith($bannerMobileImagePath, ['http://', 'https://', '/']) ? $bannerMobileImagePath : \Illuminate\Support\Facades\Storage::url($bannerMobileImagePath))
                             : null;
                     @endphp
-                    <article data-banner-slide class="{{ $loop->first ? '' : 'hidden' }} relative min-h-[300px] overflow-hidden {{ $bannerImageUrl ? 'bg-slate-950' : 'bg-gradient-to-br '.($banner->accent ?: 'from-slate-950 to-blue-950') }} p-6 text-white sm:min-h-[380px] sm:p-10">
+                    <article data-banner-slide class="{{ $loop->first ? '' : 'hidden' }} relative min-h-[300px] overflow-hidden {{ $bannerImageUrl ? 'bg-slate-950' : 'bg-gradient-to-br '.($banner->accent ?: 'from-slate-950 to-teal-900') }} p-6 text-white sm:min-h-[380px] sm:p-10">
                         @if($bannerImageUrl)
                             <picture class="absolute inset-0 h-full w-full">
                                 @if($bannerMobileImageUrl)
@@ -268,7 +268,7 @@
                         @endunless
                     </article>
                 @empty
-                    <article class="relative min-h-[300px] overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-6 text-white sm:min-h-[380px] sm:p-10">
+                    <article class="relative min-h-[300px] overflow-hidden bg-gradient-to-br from-slate-950 via-teal-950 to-slate-900 p-6 text-white sm:min-h-[380px] sm:p-10">
                         <div class="relative z-10 max-w-2xl">
                             <span class="inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 backdrop-blur">Belanja Praktis</span>
                             <h1 class="mt-5 text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">Temukan produk pilihan dan pesan lebih mudah.</h1>
@@ -309,7 +309,7 @@
             </div>
 
             <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-white/5 sm:block sm:rounded-[2rem] sm:p-6">
-                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 ring-1 ring-blue-100 dark:bg-blue-400/10 dark:text-blue-300 dark:ring-blue-400/20">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 ring-1 ring-teal-100 dark:bg-teal-400/10 dark:text-teal-300 dark:ring-teal-400/20">
                     <i class="ph ph-squares-four text-2xl"></i>
                 </div>
                 <div class="min-w-0">
@@ -319,12 +319,12 @@
             </div>
 
             <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-white/5 sm:block sm:rounded-[2rem] sm:p-6">
-                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-50 text-violet-600 ring-1 ring-violet-100 dark:bg-violet-400/10 dark:text-violet-300 dark:ring-violet-400/20">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-400/10 dark:text-amber-300 dark:ring-amber-400/20">
                     <i class="ph ph-sparkle text-2xl"></i>
                 </div>
                 <div class="min-w-0">
                     <h3 class="text-sm font-extrabold leading-tight text-slate-950 dark:text-white sm:mt-4 sm:text-base">Nyaman Dilihat</h3>
-                    <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400 sm:mt-2 sm:text-sm sm:leading-6">Tampilan ringan dan responsif, tetap rapi saat dibuka dari HP maupun desktop.</p>
+                    <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400 sm:mt-2 sm:text-sm sm:leading-6">Tampilan nyaman dan tetap rapi saat dibuka dari perangkat apa pun.</p>
                 </div>
             </div>
         </div>
@@ -334,11 +334,11 @@
 <section id="produk" class="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
     <div class="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-end md:justify-between">
         <div>
-            <p class="text-sm font-extrabold uppercase tracking-wide text-blue-600 dark:text-blue-400">Katalog Produk</p>
+            <p class="text-sm font-extrabold uppercase tracking-wide text-teal-600 dark:text-teal-400">Katalog Produk</p>
             <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Pilih produk yang paling sesuai</h2>
             <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">Cari produk favorit, cek pilihan yang tersedia, lalu lanjutkan pesanan dengan alur yang simpel.</p>
         </div>
-        <button data-cart-toggle type="button" class="hidden items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950 md:inline-flex">
+        <button data-cart-toggle type="button" class="hidden items-center justify-center gap-2 rounded-2xl bg-teal-700 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:-translate-y-0.5 hover:shadow-md dark:bg-teal-500 dark:text-white md:inline-flex">
             Cek Keranjang <i class="ph ph-shopping-cart-simple"></i>
         </button>
     </div>
@@ -347,30 +347,30 @@
         <div class="grid gap-3 md:grid-cols-[1fr_.65fr_.55fr_auto]">
             <label class="relative block">
                 <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input name="q" value="{{ $filters['query'] }}" placeholder="Cari produk..." class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-medium outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
+                <input name="q" value="{{ $filters['query'] }}" placeholder="Cari produk..." class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-medium outline-none transition placeholder:text-slate-400 focus:border-teal-600 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
             </label>
 
-            <select name="category" class="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium outline-none transition focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
+            <select name="category" class="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium outline-none transition focus:border-teal-600 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
                 <option value="all" @selected($filters['category'] === 'all')>Semua Kategori</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->slug }}" @selected($filters['category'] === $category->slug)>{{ $category->name }}</option>
                 @endforeach
             </select>
 
-            <select name="sort" class="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium outline-none transition focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
+            <select name="sort" class="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium outline-none transition focus:border-teal-600 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
                 <option value="popular" @selected($filters['sort'] === 'popular')>Paling Populer</option>
                 <option value="highest" @selected($filters['sort'] === 'highest')>Harga Tertinggi</option>
                 <option value="lowest" @selected($filters['sort'] === 'lowest')>Harga Terendah</option>
                 <option value="discount" @selected($filters['sort'] === 'discount')>Promo Terbaik</option>
             </select>
 
-            <button class="h-12 rounded-2xl bg-slate-950 px-6 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">Terapkan</button>
+            <button class="h-12 rounded-2xl bg-teal-700 px-6 text-sm font-extrabold text-white shadow-sm transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:-translate-y-0.5 hover:shadow-md dark:bg-teal-500 dark:text-white">Terapkan</button>
         </div>
     </form>
 
-    <div class="mb-6 grid gap-3 rounded-[1.5rem] border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-3 shadow-sm dark:border-blue-400/15 dark:from-blue-500/10 dark:via-white/5 dark:to-cyan-500/10 sm:mb-8 sm:grid-cols-[1fr_auto] sm:items-center sm:p-4">
+    <div class="mb-6 grid gap-3 rounded-[1.5rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-emerald-50 p-3 shadow-sm dark:border-teal-400/15 dark:from-teal-500/10 dark:via-white/5 dark:to-emerald-500/10 sm:mb-8 sm:grid-cols-[1fr_auto] sm:items-center sm:p-4">
         <div class="flex items-start gap-3">
-            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-600 text-white shadow-lg shadow-teal-600/20">
                 <i class="ph ph-shopping-cart-simple text-xl"></i>
             </div>
             <div>
@@ -378,7 +378,7 @@
                 <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400 sm:text-sm">Tambahkan beberapa produk ke keranjang, cek ringkasannya, lalu lanjut konfirmasi pesanan via WhatsApp.</p>
             </div>
         </div>
-        <button data-cart-toggle type="button" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">
+        <button data-cart-toggle type="button" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-teal-700 px-5 text-sm font-extrabold text-white transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:-translate-y-0.5 hover:shadow-md dark:bg-teal-500 dark:text-white">
             Buka Checkout <i class="ph ph-arrow-right"></i>
         </button>
     </div>
@@ -401,7 +401,7 @@
 <section id="voucher" class="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
     <div class="relative overflow-hidden rounded-[1.75rem] bg-slate-950 p-5 text-white shadow-soft sm:rounded-[2rem] sm:p-8">
         <div class="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-emerald-400/20 blur-2xl"></div>
-        <div class="pointer-events-none absolute -bottom-14 -left-14 h-48 w-48 rounded-full bg-blue-400/20 blur-2xl"></div>
+        <div class="pointer-events-none absolute -bottom-14 -left-14 h-48 w-48 rounded-full bg-teal-400/20 blur-2xl"></div>
 
         <div class="relative mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -437,7 +437,7 @@
 <section class="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
     <div class="mb-6 flex items-end justify-between gap-4 sm:mb-8">
         <div>
-            <p class="text-sm font-extrabold uppercase tracking-wide text-blue-600 dark:text-blue-400">Pilihan Terbaru</p>
+            <p class="text-sm font-extrabold uppercase tracking-wide text-teal-600 dark:text-teal-400">Pilihan Terbaru</p>
             <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Produk baru yang bisa kamu cek</h2>
         </div>
         <a href="#produk" class="hidden rounded-2xl border border-slate-200 px-5 py-3 text-sm font-extrabold transition hover:bg-white dark:border-white/10 dark:hover:bg-white/10 sm:inline-flex">Lihat Semua</a>
@@ -456,8 +456,8 @@
 <section id="keunggulan" class="mx-auto max-w-7xl px-4 py-7 pb-24 sm:px-6 sm:py-10 md:pb-10 lg:px-8">
     <div class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-soft dark:border-white/10 dark:bg-white/5 sm:rounded-[2rem]">
         <div class="grid gap-0 lg:grid-cols-[.95fr_1.05fr]">
-            <div class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-6 text-white sm:p-8 lg:p-10">
-                <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-400/20 blur-3xl"></div>
+            <div class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-teal-950 to-slate-900 p-6 text-white sm:p-8 lg:p-10">
+                <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-teal-400/20 blur-3xl"></div>
                 <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl"></div>
                 <div class="relative">
                     <span class="inline-flex rounded-full bg-white/12 px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-wide text-white/85 ring-1 ring-white/15">Fitur Unggulan</span>
@@ -476,7 +476,7 @@
 
             <div class="grid gap-3 p-4 sm:grid-cols-2 sm:p-6 lg:p-8">
                 <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-white/5">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-blue-600 shadow-sm dark:bg-white/10 dark:text-blue-300">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-teal-600 shadow-sm dark:bg-white/10 dark:text-teal-300">
                         <i class="ph ph-funnel text-2xl"></i>
                     </div>
                     <h3 class="mt-4 font-extrabold text-slate-950 dark:text-white">Filter Produk</h3>
@@ -492,7 +492,7 @@
                 </div>
 
                 <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-white/5">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-violet-600 shadow-sm dark:bg-white/10 dark:text-violet-300">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-amber-600 shadow-sm dark:bg-white/10 dark:text-amber-300">
                         <i class="ph ph-basket text-2xl"></i>
                     </div>
                     <h3 class="mt-4 font-extrabold text-slate-950 dark:text-white">Keranjang Ringkas</h3>
@@ -504,7 +504,7 @@
                         <i class="ph ph-device-mobile text-2xl"></i>
                     </div>
                     <h3 class="mt-4 font-extrabold text-slate-950 dark:text-white">Nyaman di Mobile</h3>
-                    <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">Card produk, tombol, dan menu bawah dibuat lebih proporsional untuk penggunaan dari HP.</p>
+                    <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">Tampilan produk, tombol, dan menu bawah dibuat lebih nyaman saat digunakan dari HP.</p>
                 </div>
             </div>
         </div>
@@ -526,7 +526,7 @@
             Promo
         </a>
         <button data-cart-toggle type="button" class="mobile-bottom-action">
-            <span data-cart-count-badge class="absolute right-2 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-rose-500 px-1 text-[9px] font-extrabold text-white {{ ($cart['count'] ?? 0) > 0 ? '' : 'hidden' }}">{{ $cart['count'] ?? 0 }}</span>
+            <span data-cart-count-badge class="absolute right-2 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-amber-500 px-1 text-[9px] font-extrabold text-white {{ ($cart['count'] ?? 0) > 0 ? '' : 'hidden' }}">{{ $cart['count'] ?? 0 }}</span>
             <i class="ph ph-shopping-cart-simple text-lg"></i>
             Checkout
         </button>

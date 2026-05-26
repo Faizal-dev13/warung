@@ -17,7 +17,7 @@
     }
 ?>
 
-<article class="store-product-card group flex h-full min-w-0 flex-col overflow-hidden rounded-[1.35rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-soft dark:border-white/10 dark:bg-white/5 dark:hover:border-blue-400/30">
+<article class="store-product-card group flex h-full min-w-0 flex-col overflow-hidden rounded-[1.35rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-teal-200 hover:shadow-soft dark:border-white/10 dark:bg-white/5 dark:hover:border-teal-400/30">
     <a href="<?php echo e(route('products.show', $product->slug)); ?>" class="block p-3 pb-0 sm:p-4 sm:pb-0" aria-label="Lihat detail <?php echo e($product->name); ?>">
         <div class="store-product-media aspect-[4/3] relative overflow-hidden rounded-[1.05rem] bg-slate-100 ring-1 ring-slate-100 dark:bg-white/10 dark:ring-white/10 sm:rounded-[1.25rem]">
             <?php if($productImageUrl): ?>
@@ -42,9 +42,9 @@
     </a>
 
     <div class="store-product-body flex min-w-0 flex-1 flex-col p-3 sm:p-4">
-        <p class="store-product-category truncate text-[11px] font-extrabold uppercase tracking-wide text-blue-600 dark:text-blue-400 sm:text-xs"><?php echo e($product->category?->name ?? 'Produk'); ?></p>
+        <p class="store-product-category truncate text-[11px] font-extrabold uppercase tracking-wide text-teal-600 dark:text-teal-400 sm:text-xs"><?php echo e($product->category?->name ?? 'Produk'); ?></p>
 
-        <a href="<?php echo e(route('products.show', $product->slug)); ?>" class="store-product-title mt-1.5 line-clamp-2 min-h-[2.25rem] text-sm font-extrabold leading-tight text-slate-950 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 sm:mt-2 sm:min-h-[3rem] sm:text-lg sm:leading-snug">
+        <a href="<?php echo e(route('products.show', $product->slug)); ?>" class="store-product-title mt-1.5 line-clamp-2 min-h-[2.25rem] text-sm font-extrabold leading-tight text-slate-950 transition group-hover:text-teal-600 dark:text-white dark:group-hover:text-teal-400 sm:mt-2 sm:min-h-[3rem] sm:text-lg sm:leading-snug">
             <?php echo e($product->name); ?>
 
         </a>
@@ -62,13 +62,13 @@
             <div class="store-product-actions mt-3 grid grid-cols-[1fr_2.5rem] gap-2 sm:grid-cols-[1fr_3rem]">
                 <form action="<?php echo e(route('cart.add', $product->slug)); ?>" method="post" class="min-w-0" data-cart-form data-cart-open="true">
                     <?php echo csrf_field(); ?>
-                    <button class="store-product-add-button inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-2xl bg-slate-950 px-3 text-xs font-extrabold text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-slate-950 sm:h-12 sm:text-sm">
+                    <button class="store-product-add-button inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-2xl bg-teal-700 px-3 text-xs font-extrabold text-white transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-teal-500 dark:text-white sm:h-12 sm:text-sm">
                         <i class="ph ph-shopping-cart-simple text-base"></i>
                         <span>Tambah</span>
                     </button>
                 </form>
 
-                <a href="<?php echo e(route('products.show', $product->slug)); ?>" class="store-product-detail-button inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:border-blue-200 hover:text-blue-600 dark:border-white/10 dark:bg-white/10 dark:text-white sm:h-12 sm:w-12" aria-label="Detail <?php echo e($product->name); ?>" title="Detail produk">
+                <a href="<?php echo e(route('products.show', $product->slug)); ?>" class="store-product-detail-button inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:border-teal-200 hover:text-teal-600 dark:border-white/10 dark:bg-white/10 dark:text-white sm:h-12 sm:w-12" aria-label="Detail <?php echo e($product->name); ?>" title="Detail produk">
                     <i class="ph ph-arrow-right text-base sm:text-lg"></i>
                 </a>
             </div>

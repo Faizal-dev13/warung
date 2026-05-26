@@ -1,38 +1,54 @@
 @extends('admin.layouts.app')
 @section('page_title','Produk')
-@section('page_description','Kelola produk yang tampil di katalog. Foto produk, harga, status, dan urutan bisa dicek dari tabel ini.')
-@section('page_action')<a href="{{ route('admin.products.create') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm dark:bg-white dark:text-slate-950"><i class="ph ph-plus-circle"></i> Tambah Produk</a>@endsection
+@section('page_description','Kelola foto, harga, status, dan urutan produk yang tampil di katalog.')
+@section('page_action')
+<a href="{{ route('admin.products.create') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-700 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:-translate-y-0.5 hover:shadow-lg dark:bg-teal-500 dark:text-white"><i class="ph ph-plus-circle"></i> Tambah Produk</a>
+@endsection
 @section('content')
-<section class="rounded-[1.5rem] border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900" data-admin-table>
-    <div class="border-b border-slate-100 p-4 dark:border-slate-800">
-        <div class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-            <div>
-                <h2 class="font-extrabold">Daftar Produk</h2>
-                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Cari, urutkan, dan cek visual produk sebelum tampil ke customer.</p>
-            </div>
-            <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px] xl:min-w-[560px]">
-                <label class="relative block"><i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i><input data-datatable-search placeholder="Cari produk..." class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm font-semibold outline-none dark:border-slate-700 dark:bg-slate-800"></label>
-                <form method="GET" action="{{ route('admin.products.index') }}">
-                    <select name="category_id" onchange="this.form.submit()" class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-semibold outline-none dark:border-slate-700 dark:bg-slate-800">
-                        <option value="">Semua kategori</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" @selected(request('category_id') == $category->id)>{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </form>
-            </div>
+<form method="GET" action="{{ route('admin.products.index') }}" class="mb-4 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <input type="hidden" name="sort" value="{{ $filters['sort'] ?? 'created_at' }}">
+    <input type="hidden" name="direction" value="{{ $filters['direction'] ?? 'desc' }}">
+    <div class="grid gap-3 xl:grid-cols-[1fr_220px_170px_140px_auto]">
+        <label class="relative block">
+            <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Cari produk..." class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm font-semibold outline-none transition focus:border-teal-600 focus:bg-white dark:border-slate-700 dark:bg-slate-800 dark:focus:border-white/40">
+        </label>
+        <select name="category_id" class="h-11 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-semibold outline-none transition focus:border-teal-600 focus:bg-white dark:border-slate-700 dark:bg-slate-800">
+            <option value="">Semua kategori</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" @selected(($filters['category_id'] ?? '') == $category->id)>{{ $category->name }}</option>
+            @endforeach
+        </select>
+        <select name="status" class="h-11 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-semibold outline-none transition focus:border-teal-600 focus:bg-white dark:border-slate-700 dark:bg-slate-800">
+            <option value="" @selected(($filters['status'] ?? '') === '')>Semua status</option>
+            <option value="active" @selected(($filters['status'] ?? '') === 'active')>Aktif</option>
+            <option value="inactive" @selected(($filters['status'] ?? '') === 'inactive')>Nonaktif</option>
+        </select>
+        <select name="per_page" class="h-11 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-semibold outline-none transition focus:border-teal-600 focus:bg-white dark:border-slate-700 dark:bg-slate-800">
+            @foreach([10,25,50] as $size)<option value="{{ $size }}" @selected(($filters['per_page'] ?? 10) == $size)>{{ $size }} data</option>@endforeach
+        </select>
+        <div class="flex gap-2">
+            <button class="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-2xl bg-teal-700 px-5 text-sm font-extrabold text-white transition hover:bg-teal-800 dark:hover:bg-teal-400 hover:-translate-y-0.5 dark:bg-teal-500 dark:text-white"><i class="ph ph-funnel"></i> Terapkan</button>
+            <a href="{{ route('admin.products.index') }}" class="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 px-4 text-sm font-extrabold text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">Reset</a>
         </div>
+    </div>
+</form>
+
+<section class="rounded-[1.5rem] border border-slate-200 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
+    <div class="border-b border-slate-100 p-5 dark:border-slate-800">
+        <h2 class="font-extrabold">Daftar Produk</h2>
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Cek produk, kategori, harga, dan status tayang dari satu tampilan.</p>
     </div>
     <div class="admin-scrollbar overflow-x-auto">
         <table class="w-full min-w-[1040px] text-left text-sm">
             <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
                 <tr>
-                    <th data-sortable class="px-5 py-4">Produk <i class="sort-icon ph ph-caret-up-down ml-1"></i></th>
-                    <th data-sortable>Kategori <i class="sort-icon ph ph-caret-up-down ml-1"></i></th>
-                    <th data-sortable>Harga <i class="sort-icon ph ph-caret-up-down ml-1"></i></th>
+                    <th class="px-5 py-4">@include('admin.partials.sort-link', ['sort' => 'name', 'label' => 'Produk', 'defaultSort' => $filters['sort'] ?? 'sort_order'])</th>
+                    <th>@include('admin.partials.sort-link', ['sort' => 'category', 'label' => 'Kategori', 'defaultSort' => $filters['sort'] ?? 'sort_order'])</th>
+                    <th>@include('admin.partials.sort-link', ['sort' => 'price', 'label' => 'Harga', 'defaultSort' => $filters['sort'] ?? 'sort_order'])</th>
                     <th>Label</th>
-                    <th>Status</th>
-                    <th data-sortable>Urutan <i class="sort-icon ph ph-caret-up-down ml-1"></i></th>
+                    <th>@include('admin.partials.sort-link', ['sort' => 'status', 'label' => 'Status', 'defaultSort' => $filters['sort'] ?? 'sort_order'])</th>
+                    <th>@include('admin.partials.sort-link', ['sort' => 'sort_order', 'label' => 'Urutan', 'defaultSort' => $filters['sort'] ?? 'sort_order'])</th>
                     <th class="pr-5 text-right">Aksi</th>
                 </tr>
             </thead>
@@ -57,32 +73,23 @@
                             <div class="min-w-0">
                                 <div class="max-w-[280px] truncate font-extrabold text-slate-950 dark:text-white">{{ $product->name }}</div>
                                 <div class="mt-1 max-w-[360px] truncate text-xs text-slate-500 dark:text-slate-400">{{ $product->summary }}</div>
-                                @unless($imageUrl)<div class="mt-1 text-[11px] font-bold text-amber-600 dark:text-amber-300">Foto belum diupload</div>@endunless
+                                @unless($imageUrl)<div class="mt-1 text-[11px] font-bold text-amber-600 dark:text-amber-300">Foto belum tersedia</div>@endunless
                             </div>
                         </div>
                     </td>
-                    <td>{{ $product->category?->name ?: '-' }}</td>
-                    <td><b>Rp {{ number_format($product->price,0,',','.') }}</b>@if($product->old_price)<br><span class="text-xs text-slate-400 line-through">Rp {{ number_format($product->old_price,0,',','.') }}</span>@endif</td>
-                    <td>@if($product->badge)<span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-extrabold text-blue-700 dark:bg-blue-400/10 dark:text-blue-300">{{ $product->badge }}</span>@else<span class="text-slate-400">-</span>@endif</td>
-                    <td><div class="flex flex-wrap gap-1.5"><span class="rounded-full px-3 py-1 text-xs font-extrabold {{ $product->is_active ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400' }}">{{ $product->is_active ? 'Aktif' : 'Nonaktif' }}</span>@if($product->is_featured)<span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-extrabold text-violet-700 dark:bg-violet-400/10 dark:text-violet-300">Unggulan</span>@endif @if($product->is_latest)<span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-extrabold text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-300">Terbaru</span>@endif</div></td>
-                    <td>{{ $product->sort_order }}</td>
-                    <td class="pr-5 text-right">
-                        <div class="inline-flex items-center gap-2">
-                            <a class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-2 text-xs font-extrabold transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800" href="{{ route('admin.products.edit',$product) }}"><i class="ph ph-pencil-simple"></i> Edit</a>
-                            <form class="inline" method="POST" action="{{ route('admin.products.destroy',$product) }}" onsubmit="return confirm('Hapus produk ini?')">@csrf @method('DELETE') <button class="inline-flex items-center gap-1 rounded-xl border border-red-200 px-3 py-2 text-xs font-extrabold text-red-600 transition hover:bg-red-50 dark:border-red-900/60 dark:hover:bg-red-950/30"><i class="ph ph-trash"></i> Hapus</button></form>
-                        </div>
-                    </td>
+                    <td><span class="rounded-full bg-teal-50 px-3 py-1 text-xs font-extrabold text-teal-700 dark:bg-teal-400/10 dark:text-teal-300">{{ $product->category?->name ?? '-' }}</span></td>
+                    <td class="font-extrabold">Rp {{ number_format($product->price,0,',','.') }}</td>
+                    <td><div class="flex flex-wrap gap-1.5">@if($product->badge)<span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-extrabold text-amber-700 dark:bg-amber-400/10 dark:text-amber-300">{{ $product->badge }}</span>@endif @if($product->is_featured)<span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-extrabold text-amber-700 dark:bg-amber-400/10 dark:text-amber-300">Unggulan</span>@endif @if($product->is_latest)<span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-extrabold text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300">Terbaru</span>@endif @if(!$product->badge && !$product->is_featured && !$product->is_latest)<span class="text-slate-400">-</span>@endif</div></td>
+                    <td><span class="rounded-full px-3 py-1 text-xs font-extrabold {{ $product->is_active ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400' }}">{{ $product->is_active ? 'Aktif' : 'Nonaktif' }}</span></td>
+                    <td class="font-semibold">{{ $product->sort_order }}</td>
+                    <td class="pr-5 text-right"><div class="inline-flex items-center gap-2"><a class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-2 text-xs font-extrabold transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800" href="{{ route('admin.products.edit',$product) }}"><i class="ph ph-pencil-simple"></i> Edit</a><form class="inline" method="POST" action="{{ route('admin.products.destroy',$product) }}" onsubmit="return confirm('Hapus produk ini?')">@csrf @method('DELETE') <button class="inline-flex items-center gap-1 rounded-xl border border-red-200 px-3 py-2 text-xs font-extrabold text-red-600 transition hover:bg-red-50 dark:border-red-900/60 dark:hover:bg-red-950/30"><i class="ph ph-trash"></i> Hapus</button></form></div></td>
                 </tr>
             @empty
-                <tr data-empty-row><td colspan="7" class="px-5 py-10 text-center text-slate-500">Belum ada produk.</td></tr>
+                @include('admin.partials.empty-state', ['colspan' => 7, 'icon' => 'ph-package', 'title' => 'Produk belum tersedia', 'description' => 'Tambahkan produk agar katalog bisa mulai digunakan.'])
             @endforelse
             </tbody>
         </table>
     </div>
-    <div class="flex flex-col gap-3 border-t border-slate-100 p-4 text-sm dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
-        <div class="text-slate-500 dark:text-slate-400"><span data-datatable-info></span></div>
-        <div class="flex items-center gap-2"><select data-datatable-length class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold dark:border-slate-700 dark:bg-slate-900"><option value="5">5 baris</option><option value="10" selected>10 baris</option><option value="20">20 baris</option></select><button type="button" data-datatable-prev class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold disabled:opacity-40 dark:border-slate-700">Prev</button><button type="button" data-datatable-next class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold disabled:opacity-40 dark:border-slate-700">Next</button></div>
-    </div>
 </section>
-<div class="mt-4">{{ $products->links() }}</div>
+@include('admin.partials.pagination', ['paginator' => $products])
 @endsection

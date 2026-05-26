@@ -59,7 +59,7 @@
                         @csrf
                         @method('PATCH')
                         <label class="sr-only" for="cart-qty-{{ $item['id'] }}">Jumlah {{ $item['name'] }}</label>
-                        <input id="cart-qty-{{ $item['id'] }}" name="qty" type="number" min="1" max="99" value="{{ $item['qty'] }}" class="h-10 w-20 rounded-2xl border border-slate-200 bg-slate-50 px-3 text-sm font-bold outline-none transition focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
+                        <input id="cart-qty-{{ $item['id'] }}" name="qty" type="number" min="1" max="99" value="{{ $item['qty'] }}" class="h-10 w-20 rounded-2xl border border-slate-200 bg-slate-50 px-3 text-sm font-bold outline-none transition focus:border-teal-600 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
                         <button class="inline-flex h-10 items-center justify-center rounded-2xl bg-slate-100 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white/10 dark:text-white dark:hover:bg-white/20" data-cart-submit-label="Update">
                             Update
                         </button>

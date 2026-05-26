@@ -49,7 +49,7 @@
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Pilih status yang paling sesuai dengan kondisi pesanan.</p>
             <form method="POST" action="{{ route('admin.orders.status',$order) }}" class="mt-4">@csrf @method('PATCH')
                 <select name="status" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none dark:border-slate-700 dark:bg-slate-800">@foreach($statuses as $status)<option value="{{ $status }}" @selected($order->status===$status)>{{ $statusLabels[$status] ?? str_replace('_',' ',$status) }}</option>@endforeach</select>
-                <button class="mt-3 w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white dark:bg-white dark:text-slate-950">Simpan Status</button>
+                <button class="mt-3 w-full rounded-2xl bg-teal-700 px-5 py-3 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-teal-800 dark:bg-teal-500 dark:hover:bg-teal-400 dark:text-white">Simpan Status</button>
             </form>
         </section>
     </aside>

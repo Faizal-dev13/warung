@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Voucher;
 use App\Support\Money;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,7 @@ use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
-    public function add(string $slug): RedirectResponse
+    public function add(Request $request, string $slug): JsonResponse|RedirectResponse
     {
         $product = Product::where('slug', $slug)->where('is_active', true)->firstOrFail();
         $cart = session('cart', []);
@@ -21,12 +22,13 @@ class CartController extends Controller
 
         if (isset($cart[$key])) {
             $cart[$key]['qty']++;
+            $cart[$key]['image_path'] = $product->image_path;
         } else {
             $cart[$key] = [
                 'id' => $product->id,
                 'slug' => $product->slug,
                 'name' => $product->name,
-                'price' => $product->price,
+                'price' => (int) $product->price,
                 'qty' => 1,
                 'icon' => $product->icon,
                 'image_path' => $product->image_path,
@@ -35,29 +37,29 @@ class CartController extends Controller
 
         session(['cart' => $cart]);
 
-        return back()->with('success', $product->name.' masuk keranjang.');
+        return $this->cartResponse($request, $product->name.' masuk keranjang.');
     }
 
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $validated = $request->validate(['qty' => ['required', 'integer', 'min:1', 'max:99']]);
         $cart = session('cart', []);
 
         if (isset($cart[(string) $id])) {
-            $cart[(string) $id]['qty'] = $validated['qty'];
+            $cart[(string) $id]['qty'] = (int) $validated['qty'];
             session(['cart' => $cart]);
         }
 
-        return back()->with('success', 'Keranjang diperbarui.');
+        return $this->cartResponse($request, 'Keranjang diperbarui.');
     }
 
-    public function remove(int $id): RedirectResponse
+    public function remove(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $cart = session('cart', []);
         unset($cart[(string) $id]);
         session(['cart' => $cart]);
 
-        return back()->with('success', 'Produk dihapus dari keranjang.');
+        return $this->cartResponse($request, 'Produk dihapus dari keranjang.');
     }
 
     public function checkout(Request $request): RedirectResponse
@@ -115,6 +117,39 @@ class CartController extends Controller
         $wa = preg_replace('/\D+/', '', (string) config('store.whatsapp'));
 
         return redirect()->away('https://wa.me/'.$wa.'?text='.rawurlencode($order->whatsapp_message));
+    }
+
+    private function cartResponse(Request $request, string $message): JsonResponse|RedirectResponse
+    {
+        $cart = $this->cartSummary();
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'ok' => true,
+                'message' => $message,
+                'cart' => [
+                    'count' => $cart['count'],
+                    'subtotal' => $cart['subtotal'],
+                    'subtotal_formatted' => $cart['subtotal_formatted'],
+                ],
+                'html' => view('partials.cart-items', ['cart' => $cart])->render(),
+            ]);
+        }
+
+        return back()->with('success', $message);
+    }
+
+    private function cartSummary(): array
+    {
+        $items = session('cart', []);
+        $subtotal = collect($items)->sum(fn ($item) => $item['price'] * $item['qty']);
+
+        return [
+            'items' => $items,
+            'count' => collect($items)->sum('qty'),
+            'subtotal' => $subtotal,
+            'subtotal_formatted' => Money::rupiah($subtotal),
+        ];
     }
 
     private function buildWhatsappMessage(string $invoice, array $customer, array $cart, int $subtotal, int $discount, int $total, string $voucherCode): string

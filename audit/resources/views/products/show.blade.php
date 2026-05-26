@@ -4,22 +4,44 @@
     use Illuminate\Support\Str;
 
     $productImagePath = $product->image_path ?? null;
-    $productImageUrl = $productImagePath
-        ? (Str::startsWith($productImagePath, ['http://', 'https://', '/']) ? $productImagePath : Storage::url($productImagePath))
-        : null;
+    $productImageUrl = null;
+
+    if ($productImagePath) {
+        if (Str::startsWith($productImagePath, ['http://', 'https://', '/'])) {
+            $productImageUrl = $productImagePath;
+        } elseif (Str::startsWith($productImagePath, ['storage/'])) {
+            $productImageUrl = asset($productImagePath);
+        } else {
+            $productImageUrl = Storage::url($productImagePath);
+        }
+    }
 @endphp
 
 @extends('layouts.app')
 @section('title', $product->name.' - '.config('store.name'))
 @section('content')
-<section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-14">
+<section class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12">
+    <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <a href="{{ route('home') }}#produk" class="inline-flex w-fit items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-extrabold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-600 hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:border-blue-400/30 dark:hover:text-blue-300">
+            <span class="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-white">
+                <i class="ph ph-arrow-left"></i>
+            </span>
+            Kembali ke Katalog
+        </a>
+
+        <button data-cart-toggle type="button" class="inline-flex w-fit items-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">
+            <i class="ph ph-shopping-cart-simple"></i> Cek Keranjang
+        </button>
+    </div>
+
     <div class="grid gap-6 lg:grid-cols-[.95fr_1.05fr] lg:gap-10">
         <div class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-soft dark:border-white/10 dark:bg-white/5 sm:rounded-[2rem]">
             <div class="relative overflow-hidden bg-slate-100 dark:bg-white/10">
                 @if($productImageUrl)
                     <img src="{{ $productImageUrl }}" alt="{{ $product->name }}" class="aspect-[4/3] w-full object-cover sm:aspect-square lg:aspect-[4/4.35]">
+                    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/18 via-transparent to-transparent"></div>
                     @if($product->badge)
-                        <span class="absolute left-4 top-4 rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-sm backdrop-blur dark:bg-slate-950/80 dark:text-white">{{ $product->badge }}</span>
+                        <span class="absolute left-4 top-4 rounded-full bg-white/90 px-4 py-2 text-xs font-extrabold text-slate-800 shadow-sm ring-1 ring-white/70 backdrop-blur dark:bg-slate-950/80 dark:text-white dark:ring-white/10">{{ $product->badge }}</span>
                     @endif
                 @else
                     <div class="relative flex min-h-[320px] flex-col justify-between overflow-hidden bg-gradient-to-br {{ $product->accent ?: 'from-slate-900 to-blue-900' }} p-7 text-white sm:min-h-[460px] sm:p-8">
@@ -36,16 +58,12 @@
         </div>
 
         <div class="lg:py-4">
-            <a href="{{ route('home') }}#produk" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-extrabold text-slate-500 transition hover:text-slate-950 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-slate-400 dark:hover:text-white">
-                <i class="ph ph-arrow-left"></i> Kembali ke katalog
-            </a>
-
-            <div class="mt-5 flex flex-wrap items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
                 @if($product->category)
-                    <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-extrabold text-blue-700 dark:bg-blue-400/10 dark:text-blue-300">{{ $product->category->name }}</span>
+                    <span class="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700 dark:bg-blue-400/10 dark:text-blue-300">{{ $product->category->name }}</span>
                 @endif
                 @if($product->badge)
-                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-extrabold text-slate-600 dark:bg-white/10 dark:text-slate-300">{{ $product->badge }}</span>
+                    <span class="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-extrabold text-slate-600 dark:bg-white/10 dark:text-slate-300">{{ $product->badge }}</span>
                 @endif
             </div>
 
@@ -74,9 +92,9 @@
             @endif
 
             <div class="mt-8 grid gap-3 sm:grid-cols-[1fr_auto]">
-                <form action="{{ route('cart.add', $product->slug) }}" method="post" class="min-w-0">
+                <form action="{{ route('cart.add', $product->slug) }}" method="post" class="min-w-0" data-cart-form data-cart-open="true">
                     @csrf
-                    <button class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-6 py-4 font-extrabold text-white shadow-soft transition hover:-translate-y-0.5 dark:bg-white dark:text-slate-950">
+                    <button class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-6 py-4 font-extrabold text-white shadow-soft transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-slate-950">
                         <i class="ph ph-shopping-cart-simple"></i> Tambah ke Keranjang
                     </button>
                 </form>

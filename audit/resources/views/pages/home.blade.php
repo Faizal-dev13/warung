@@ -14,89 +14,33 @@
             scroll-margin-top: 5.5rem;
         }
 
+        .home-product-grid {
+            align-items: stretch;
+        }
+
         .home-product-card {
             min-width: 0;
             height: 100%;
         }
 
-        .home-product-card > * {
-            position: relative;
-            display: flex !important;
+        .home-product-card .store-product-card {
             height: 100%;
-            min-width: 0;
-            overflow: hidden;
-            flex-direction: column !important;
-            border-radius: 1.35rem !important;
-            border: 1px solid rgba(226, 232, 240, .96) !important;
-            background: rgba(255, 255, 255, .98) !important;
-            box-shadow: 0 12px 34px rgba(15, 23, 42, .065) !important;
-            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+            border-radius: 1.35rem;
+            box-shadow: 0 12px 34px rgba(15, 23, 42, .065);
         }
 
-        .dark .home-product-card > * {
-            border-color: rgba(255, 255, 255, .1) !important;
-            background: rgba(255, 255, 255, .055) !important;
-        }
-
-        .home-product-card > *:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 18px 44px rgba(15, 23, 42, .12) !important;
-            border-color: rgba(59, 130, 246, .32) !important;
-        }
-
-        .home-product-card img {
-            display: block;
-            width: 100%;
+        .home-product-card .store-product-media {
             aspect-ratio: 4 / 3;
-            object-fit: cover;
-            background: #f8fafc;
         }
 
-        .home-product-card h2,
-        .home-product-card h3 {
-            display: -webkit-box !important;
-            overflow: hidden !important;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            text-overflow: ellipsis;
-            color: inherit;
-        }
-
-        .home-product-card p {
-            display: -webkit-box !important;
-            overflow: hidden !important;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            text-overflow: ellipsis;
-        }
-
-        .home-product-card :where(.line-clamp-2, .line-clamp-3) {
-            -webkit-line-clamp: 2 !important;
-        }
-
-        .home-product-card :where([class*="p-4"], [class*="p-5"], [class*="p-6"]) {
-            min-width: 0;
-        }
-
-        .home-product-card :where(a, button) {
-            max-width: 100%;
-        }
-
-        .home-product-card :where(button, a[class*="bg-"], a[class*="border"], a[class*="ring-"]) {
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: .45rem !important;
-            min-width: 0;
-            min-height: 2.55rem;
-            border-radius: 1rem !important;
-            font-weight: 800 !important;
-            line-height: 1.1 !important;
-            text-align: center;
-        }
-
-        .home-product-card :where(button, a[class*="bg-"], a[class*="border"], a[class*="ring-"]) i {
-            flex-shrink: 0;
+        .home-product-card .store-product-photo {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            max-height: none !important;
+            object-fit: cover !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .mobile-bottom-link,
@@ -145,6 +89,7 @@
         }
 
         .mobile-bottom-action {
+            position: relative;
             border: 1px solid rgba(37, 99, 235, .16);
             background: linear-gradient(135deg, rgba(37, 99, 235, .1), rgba(6, 182, 212, .12));
             color: rgb(37 99 235);
@@ -176,68 +121,85 @@
                 gap: .72rem;
             }
 
-            .home-product-card > * {
-                border-radius: 1.05rem !important;
-                box-shadow: 0 10px 24px rgba(15, 23, 42, .075) !important;
+            .home-product-card .store-product-card {
+                border-radius: 1.05rem;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, .075);
             }
 
-            .home-product-card img {
-                aspect-ratio: 1 / .82;
-                max-height: 7.2rem;
+            .home-product-card .store-product-card > a {
+                padding: .55rem .55rem 0 !important;
             }
 
-            .home-product-card :where([class*="p-4"], [class*="p-5"], [class*="p-6"]) {
-                padding: .68rem !important;
+            .home-product-card .store-product-media {
+                aspect-ratio: 1 / .78;
+                min-height: 6.95rem;
+                border-radius: .85rem !important;
             }
 
-            .home-product-card :where([class*="gap-4"], [class*="gap-5"], [class*="gap-6"]) {
-                gap: .55rem !important;
+            .home-product-card .store-product-body {
+                padding: .65rem !important;
             }
 
-            .home-product-card h2,
-            .home-product-card h3 {
-                min-height: 2.18rem;
+            .home-product-card .store-product-category {
+                font-size: .62rem !important;
+                line-height: .85rem !important;
+            }
+
+            .home-product-card .store-product-title {
+                min-height: 2.14rem;
                 font-size: .82rem !important;
-                line-height: 1.09rem !important;
+                line-height: 1.07rem !important;
                 letter-spacing: -.01em;
             }
 
-            .home-product-card p {
+            .home-product-card .store-product-summary {
                 min-height: 1rem;
-                font-size: .7rem !important;
-                line-height: 1rem !important;
-                -webkit-line-clamp: 1;
+                font-size: .69rem !important;
+                line-height: .98rem !important;
+                -webkit-line-clamp: 1 !important;
             }
 
-            .home-product-card :where([class*="text-2xl"], [class*="text-xl"], [class*="text-lg"]) {
-                font-size: .95rem !important;
-                line-height: 1.25rem !important;
+            .home-product-card .store-product-old-price {
+                font-size: .64rem !important;
+                line-height: .8rem !important;
             }
 
-            .home-product-card :where([class*="text-sm"]) {
-                font-size: .72rem !important;
-                line-height: 1rem !important;
+            .home-product-card .store-product-price {
+                font-size: .9rem !important;
+                line-height: 1.1rem !important;
             }
 
-            .home-product-card :where(button, a[class*="bg-"], a[class*="border"], a[class*="ring-"]) {
-                min-height: 2.12rem;
-                padding: .48rem .55rem !important;
+            .home-product-card .store-product-footer {
+                padding-top: .62rem !important;
+            }
+
+            .home-product-card .store-product-actions {
+                grid-template-columns: minmax(0, 1fr) 2.12rem;
+                gap: .42rem !important;
+                margin-top: .55rem !important;
+            }
+
+            .home-product-card .store-product-add-button,
+            .home-product-card .store-product-detail-button {
+                height: 2.12rem !important;
+                min-height: 2.12rem !important;
                 border-radius: .78rem !important;
                 font-size: .68rem !important;
                 line-height: .9rem !important;
                 white-space: nowrap;
             }
 
-            .home-product-card :where(a[aria-label*="Detail"], a[title*="Detail"], a[aria-label*="detail"], a[title*="detail"], button[aria-label*="Detail"], button[title*="Detail"], button[aria-label*="detail"], button[title*="detail"]) {
-                width: 2.12rem !important;
-                min-width: 2.12rem !important;
-                max-width: 2.12rem !important;
-                padding-inline: 0 !important;
+            .home-product-card .store-product-add-button {
+                padding-inline: .45rem !important;
             }
 
-            .home-product-card :where(svg, i) {
-                width: .92rem;
-                height: .92rem;
+            .home-product-card .store-product-detail-button {
+                width: 2.12rem !important;
+                min-width: 2.12rem !important;
+            }
+
+            .home-product-card .store-product-add-button i,
+            .home-product-card .store-product-detail-button i {
                 font-size: .92rem !important;
             }
 
@@ -564,6 +526,7 @@
             Promo
         </a>
         <button data-cart-toggle type="button" class="mobile-bottom-action">
+            <span data-cart-count-badge class="absolute right-2 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-rose-500 px-1 text-[9px] font-extrabold text-white {{ ($cart['count'] ?? 0) > 0 ? '' : 'hidden' }}">{{ $cart['count'] ?? 0 }}</span>
             <i class="ph ph-shopping-cart-simple text-lg"></i>
             Checkout
         </button>
