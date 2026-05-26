@@ -9,7 +9,7 @@
     ]);
     $url = url()->current().'?'.http_build_query($params);
 ?>
-<a href="<?php echo e($url); ?>" class="inline-flex items-center gap-1 rounded-xl px-2 py-1 font-extrabold transition <?php echo e($isActive ? 'bg-slate-950 text-white dark:bg-white dark:text-slate-950' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'); ?>">
+<a href="<?php echo e($url); ?>" class="inline-flex items-center gap-1 rounded-xl px-2 py-1 font-extrabold transition <?php echo e($isActive ? 'bg-teal-700 text-white dark:bg-teal-500 dark:text-white' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'); ?>">
     <?php echo e($label); ?>
 
     <?php if($isActive): ?>

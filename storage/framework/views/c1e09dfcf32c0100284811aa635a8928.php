@@ -13,7 +13,7 @@
 
                 <?php $__currentLoopData = $paginator->getUrlRange(max(1, $paginator->currentPage() - 2), min($paginator->lastPage(), $paginator->currentPage() + 2)); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $page => $url): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php if($page == $paginator->currentPage()): ?>
-                        <span class="inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-slate-950 px-3 text-xs font-extrabold text-white dark:bg-white dark:text-slate-950"><?php echo e($page); ?></span>
+                        <span class="inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-teal-700 px-3 text-xs font-extrabold text-white dark:bg-teal-500 dark:text-white"><?php echo e($page); ?></span>
                     <?php else: ?>
                         <a href="<?php echo e($url); ?>" class="inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-slate-200 px-3 text-xs font-extrabold text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"><?php echo e($page); ?></a>
                     <?php endif; ?>
