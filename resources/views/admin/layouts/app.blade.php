@@ -155,6 +155,29 @@
         .admin-btn-secondary:hover { background: rgb(248 250 252); border-color: rgb(203 213 225); color: rgb(15 23 42); }
         .dark .admin-btn-secondary { border-color: rgb(51 65 85); background: rgb(15 23 42); color: rgb(226 232 240); }
         .dark .admin-btn-secondary:hover { background: rgb(30 41 59); color: #fff; }
+
+
+        .mobile-admin-header {
+            background: rgba(248,250,252,.96);
+            border-color: rgba(226,232,240,.95);
+            box-shadow: 0 14px 30px rgba(15,23,42,.06);
+        }
+        .dark .mobile-admin-header {
+            background: rgba(2,6,23,.98) !important;
+            border-color: rgba(30,41,59,.95) !important;
+            box-shadow: 0 18px 40px rgba(0,0,0,.28);
+        }
+        .mobile-admin-action {
+            background: #fff;
+            color: rgb(51 65 85);
+            border-color: rgb(226 232 240);
+        }
+        .dark .mobile-admin-action {
+            background: rgb(15 23 42) !important;
+            color: rgb(226 232 240) !important;
+            border-color: rgb(51 65 85) !important;
+        }
+        .dark .mobile-admin-action:hover { background: rgb(30 41 59) !important; }
     </style>
     @stack('head')
 </head>
@@ -164,6 +187,7 @@
         ['Dashboard','admin.dashboard','ph-gauge'],
         ['Kategori','admin.categories.index','ph-folders'],
         ['Produk','admin.products.index','ph-package'],
+        ['Varian','admin.variants.index','ph-stack'],
         ['Voucher','admin.vouchers.index','ph-ticket'],
         ['Banner','admin.banners.index','ph-images'],
         ['Order','admin.orders.index','ph-receipt'],
@@ -242,16 +266,16 @@
 </aside>
 
 <div class="min-h-screen lg:pl-72">
-    <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-brand-surface/90 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/88 lg:hidden">
+    <header class="mobile-admin-header sticky top-0 z-30 border-b backdrop-blur-xl lg:hidden">
         <div class="flex items-center justify-between gap-3 px-4 py-3">
-            <button type="button" onclick="openAdminSidebar()" class="grid h-11 w-11 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800" aria-label="Buka menu">
+            <button type="button" onclick="openAdminSidebar()" class="mobile-admin-action grid h-11 w-11 place-items-center rounded-2xl border shadow-sm transition hover:bg-slate-50" aria-label="Buka menu">
                 <i class="ph ph-list text-xl"></i>
             </button>
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 font-extrabold">
+            <a href="{{ route('admin.dashboard') }}" class="flex min-w-0 items-center gap-2 font-extrabold text-slate-950 dark:text-white">
                 <span class="grid h-10 w-10 place-items-center rounded-2xl bg-teal-700 text-white"><i class="ph ph-storefront text-lg"></i></span>
-                <span>DigitalKit</span>
+                <span class="truncate leading-tight">DigitalKit<span class="block text-[10px] font-bold uppercase tracking-[.18em] text-teal-700 dark:text-teal-300">Admin</span></span>
             </a>
-            <button type="button" onclick="toggleTheme()" class="grid h-11 w-11 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800" aria-label="Ganti mode tampilan">
+            <button type="button" onclick="toggleTheme()" class="mobile-admin-action grid h-11 w-11 place-items-center rounded-2xl border shadow-sm transition hover:bg-slate-50" aria-label="Ganti mode tampilan">
                 <i class="ph ph-moon-stars text-lg"></i>
             </button>
         </div>
@@ -294,7 +318,7 @@
 
         @if($errors->any())
             <div class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 shadow-sm dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
-                <div class="flex items-center gap-2 font-extrabold">
+                <div class="flex min-w-0 items-center gap-2 font-extrabold text-slate-950 dark:text-white">
                     <i class="ph ph-warning-circle text-lg"></i>
                     <span>Periksa kembali data berikut:</span>
                 </div>

@@ -70,7 +70,7 @@ class OrderController extends Controller
     public function show(Order $order): View
     {
         return view('admin.orders.show', [
-            'order' => $order->load('items.product'),
+            'order' => $order->load(['items.product', 'items.variant']),
             'statuses' => self::STATUSES,
         ]);
     }
@@ -78,7 +78,7 @@ class OrderController extends Controller
     public function invoice(Order $order): View
     {
         return view('admin.orders.invoice', [
-            'order' => $order->load('items.product'),
+            'order' => $order->load(['items.product', 'items.variant']),
             'statusLabels' => [
                 'waiting_whatsapp_confirmation' => 'Menunggu WA',
                 'confirmed' => 'Dikonfirmasi',

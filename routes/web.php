@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductVariantController as AdminProductVariantController;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\StoreController;
@@ -16,8 +17,8 @@ Route::get('/', [StoreController::class, 'home'])->name('home');
 Route::get('/produk/{slug}', [StoreController::class, 'product'])->name('products.show');
 
 Route::post('/cart/{slug}', [CartController::class, 'add'])->name('cart.add');
-Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::patch('/cart/{key}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{key}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/checkout-whatsapp', [CartController::class, 'checkout'])->name('checkout.whatsapp');
 
 Route::view('/panduan', 'pages.guide')->name('guide');
@@ -31,6 +32,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('categories', AdminCategoryController::class)->except(['show']);
         Route::resource('products', AdminProductController::class)->except(['show']);
+        Route::resource('variants', AdminProductVariantController::class)->except(['show']);
         Route::resource('vouchers', AdminVoucherController::class)->except(['show']);
         Route::resource('banners', AdminBannerController::class)->except(['show']);
         Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');

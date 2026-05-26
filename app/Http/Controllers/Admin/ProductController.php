@@ -34,7 +34,7 @@ class ProductController extends Controller
         }
 
         $products = Product::query()
-            ->with('category')
+            ->with('category')->withCount('variants')
             ->when($request->filled('q'), function ($query) use ($request) {
                 $keyword = '%'.trim((string) $request->query('q')).'%';
                 $query->where(function ($subQuery) use ($keyword) {
@@ -79,13 +79,13 @@ class ProductController extends Controller
         $product = new Product();
         $product->forceFill($this->payload($request))->save();
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
+        return redirect()->route('admin.products.edit', $product)->with('success', 'Produk berhasil ditambahkan. Tambahkan varian jika produk memiliki pilihan paket atau durasi.');
     }
 
     public function edit(Product $product): View
     {
         return view('admin.products.form', [
-            'product' => $product,
+            'product' => $product->load('variants'),
             'categories' => Category::orderBy('name')->get(),
         ]);
     }

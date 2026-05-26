@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -30,8 +31,34 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function activeVariants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class)->where('is_active', true)->orderBy('sort_order')->orderBy('id');
+    }
+
     public function getDiscountAmountAttribute(): int
     {
         return max(0, (int) $this->old_price - (int) $this->price);
+    }
+
+    public function getDisplayPriceAttribute(): int
+    {
+        $variants = $this->relationLoaded('activeVariants') ? $this->activeVariants : $this->activeVariants()->get();
+        $availableVariants = $variants->filter(fn ($variant) => is_null($variant->stock) || (int) $variant->stock > 0);
+        $priceVariants = $availableVariants->isNotEmpty() ? $availableVariants : $variants;
+
+        return (int) ($priceVariants->min('price') ?? $this->price);
+    }
+
+    public function getHasActiveVariantsAttribute(): bool
+    {
+        return $this->relationLoaded('activeVariants')
+            ? $this->activeVariants->isNotEmpty()
+            : $this->activeVariants()->exists();
     }
 }

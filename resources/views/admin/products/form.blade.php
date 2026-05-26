@@ -108,6 +108,39 @@
                     </div>
                 </div>
 
+
+                <div class="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <p class="font-extrabold">Varian Produk</p>
+                            <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">Tambahkan pilihan seperti 1 bulan, 2 bulan, atau paket lain dengan harga masing-masing.</p>
+                        </div>
+                        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal-50 text-teal-700 dark:bg-teal-400/10 dark:text-teal-300"><i class="ph ph-stack text-xl"></i></span>
+                    </div>
+                    @if($product->exists)
+                        @php($variants = $product->variants ?? collect())
+                        <div class="mt-4 grid gap-2">
+                            @forelse($variants->take(3) as $variant)
+                                <div class="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 p-3 text-sm dark:bg-slate-800/60">
+                                    <div class="min-w-0">
+                                        <p class="truncate font-extrabold text-slate-950 dark:text-white">{{ $variant->name }}</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">Rp {{ number_format($variant->price,0,',','.') }}</p>
+                                    </div>
+                                    <span class="rounded-full px-2.5 py-1 text-[10px] font-extrabold {{ $variant->is_active ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300' : 'bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-300' }}">{{ $variant->is_active ? 'Aktif' : 'Nonaktif' }}</span>
+                                </div>
+                            @empty
+                                <div class="rounded-2xl border border-dashed border-slate-300 p-4 text-center text-sm font-semibold text-slate-500 dark:border-slate-700 dark:text-slate-400">Belum ada varian.</div>
+                            @endforelse
+                        </div>
+                        <div class="mt-4 grid gap-2">
+                            <a href="{{ route('admin.variants.create', ['product_id' => $product->id]) }}" class="admin-btn-primary w-full"><i class="ph ph-plus-circle"></i> Tambah Varian</a>
+                            <a href="{{ route('admin.variants.index', ['product_id' => $product->id]) }}" class="admin-btn-secondary w-full"><i class="ph ph-list-bullets"></i> Kelola Varian</a>
+                        </div>
+                    @else
+                        <div class="mt-4 rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">Simpan produk terlebih dahulu, lalu tambahkan varian dari menu Varian.</div>
+                    @endif
+                </div>
+
                 <div class="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                     <div class="flex items-center gap-3">
                         <span class="grid h-11 w-11 place-items-center rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-400/10 dark:text-amber-300"><i class="ph ph-lightbulb text-xl"></i></span>

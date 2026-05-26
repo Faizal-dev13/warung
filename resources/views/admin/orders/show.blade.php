@@ -62,7 +62,10 @@
                         <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-teal-50 text-teal-700 dark:bg-teal-400/10 dark:text-teal-300"><i class="ph ph-package text-xl"></i></span>
                         <div>
                             <p class="font-extrabold text-slate-950 dark:text-white">{{ $item->product_name }}</p>
-                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ $item->quantity }} x Rp {{ number_format($item->price,0,',','.') }}</p>
+                            @if($item->variant_name)
+                                <p class="mt-1 inline-flex rounded-full bg-teal-50 px-3 py-1 text-xs font-extrabold text-teal-700 dark:bg-teal-400/10 dark:text-teal-300">Varian: {{ $item->variant_name }}</p>
+                            @endif
+                            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">{{ $item->quantity }} x Rp {{ number_format($item->price,0,',','.') }}</p>
                         </div>
                     </div>
                     <b class="text-left sm:text-right">Rp {{ number_format($item->subtotal,0,',','.') }}</b>
