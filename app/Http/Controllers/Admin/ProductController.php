@@ -152,8 +152,8 @@ class ProductController extends Controller
             'icon' => 'ph-image-square',
             'accent' => 'from-slate-200 to-slate-300',
             'features' => $features,
-            'is_latest' => $request->boolean('is_latest'),
-            'is_featured' => $request->boolean('is_featured'),
+            'is_latest' => false,
+            'is_featured' => false,
             'is_active' => $request->boolean('is_active'),
             'sort_order' => (int) ($data['sort_order'] ?? 0),
         ];

@@ -11,10 +11,49 @@ use Illuminate\View\View;
 
 class BannerController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $perPage = $this->perPage($request);
+        $sort = (string) $request->query('sort', 'sort_order');
+        $direction = $request->query('direction') === 'desc' ? 'desc' : 'asc';
+
+        $sortable = [
+            'title' => 'title',
+            'label' => 'label',
+            'sort_order' => 'sort_order',
+            'status' => 'is_active',
+            'created_at' => 'created_at',
+        ];
+
+        if (! array_key_exists($sort, $sortable)) {
+            $sort = 'sort_order';
+        }
+
+        $banners = Banner::query()
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%'.trim((string) $request->query('q')).'%';
+                $query->where(function ($subQuery) use ($keyword) {
+                    $subQuery->where('title', 'like', $keyword)
+                        ->orWhere('label', 'like', $keyword)
+                        ->orWhere('subtitle', 'like', $keyword);
+                });
+            })
+            ->when($request->query('status') === 'active', fn ($query) => $query->where('is_active', true))
+            ->when($request->query('status') === 'inactive', fn ($query) => $query->where('is_active', false))
+            ->orderBy($sortable[$sort], $direction)
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('admin.banners.index', [
-            'banners' => Banner::orderBy('sort_order')->latest()->paginate(12),
+            'banners' => $banners,
+            'filters' => [
+                'q' => (string) $request->query('q', ''),
+                'status' => (string) $request->query('status', ''),
+                'per_page' => $perPage,
+                'sort' => $sort,
+                'direction' => $direction,
+            ],
         ]);
     }
 
@@ -28,7 +67,7 @@ class BannerController extends Controller
         $banner = new Banner();
         $banner->forceFill($this->payload($request))->save();
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner slider berhasil ditambahkan.');
+        return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil ditambahkan.');
     }
 
     public function edit(Banner $banner): View
@@ -40,7 +79,7 @@ class BannerController extends Controller
     {
         $banner->forceFill($this->payload($request, $banner))->save();
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner slider berhasil diperbarui.');
+        return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil diperbarui.');
     }
 
     public function destroy(Banner $banner): RedirectResponse
@@ -49,7 +88,7 @@ class BannerController extends Controller
         $this->deletePublicFile($banner->mobile_image_path ?? null);
         $banner->delete();
 
-        return back()->with('success', 'Banner slider berhasil dihapus.');
+        return back()->with('success', 'Banner berhasil dihapus.');
     }
 
     private function payload(Request $request, ?Banner $banner = null): array
@@ -99,7 +138,7 @@ class BannerController extends Controller
             'image_path' => $imagePath,
             'mobile_image_path' => $mobileImagePath,
             'icon' => 'ph-image-square',
-            'accent' => 'from-slate-950 to-blue-950',
+            'accent' => 'from-slate-950 to-teal-900',
             'sort_order' => (int) ($data['sort_order'] ?? 0),
             'is_active' => $request->boolean('is_active'),
         ];
@@ -110,5 +149,12 @@ class BannerController extends Controller
         if ($path && ! str_starts_with($path, 'http') && Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
         }
+    }
+
+    private function perPage(Request $request): int
+    {
+        $perPage = (int) $request->query('per_page', 10);
+
+        return in_array($perPage, [10, 25, 50], true) ? $perPage : 10;
     }
 }

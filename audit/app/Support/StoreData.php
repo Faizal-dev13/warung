@@ -39,7 +39,7 @@ class StoreData
                 'description' => 'Cocok untuk bisnis kecil yang ingin membuat visual promosi lebih rapi tanpa mulai dari nol. Berisi layout siap edit, contoh copy, dan panduan warna.',
                 'features' => ['Template banner promosi', 'Asset sosial media', 'Panduan warna dan font', 'File siap edit'],
                 'icon' => 'ph-palette',
-                'accent' => 'from-fuchsia-500 to-violet-500',
+                'accent' => 'from-teal-500 to-amber-500',
                 'latest' => false,
             ],
             [
@@ -69,7 +69,7 @@ class StoreData
                 'description' => 'Membantu owner dan admin konten menyusun jadwal posting agar tidak bingung menentukan ide harian.',
                 'features' => ['Kalender konten', 'Bank ide konten', 'Tracking status produksi', 'Format mudah dipakai'],
                 'icon' => 'ph-calendar-check',
-                'accent' => 'from-blue-500 to-cyan-500',
+                'accent' => 'from-teal-500 to-emerald-500',
                 'latest' => false,
             ],
             [
@@ -84,7 +84,7 @@ class StoreData
                 'description' => 'Berisi struktur headline, problem, benefit, testimoni, FAQ, dan CTA agar landing page terasa lebih menjual.',
                 'features' => ['Struktur section siap pakai', 'Contoh headline', 'Checklist CTA', 'FAQ dan trust element'],
                 'icon' => 'ph-layout',
-                'accent' => 'from-orange-500 to-rose-500',
+                'accent' => 'from-amber-500 to-orange-500',
                 'latest' => true,
             ],
             [
@@ -99,7 +99,7 @@ class StoreData
                 'description' => 'Cocok sebagai referensi awal ketika membangun dashboard admin bisnis atau web app custom.',
                 'features' => ['Card statistik', 'Tabel data', 'Status order', 'Layout responsive'],
                 'icon' => 'ph-chart-line-up',
-                'accent' => 'from-indigo-500 to-sky-500',
+                'accent' => 'from-teal-500 to-emerald-500',
                 'latest' => true,
             ],
             [
@@ -114,7 +114,7 @@ class StoreData
                 'description' => 'Membantu tim kecil merapikan folder desain, invoice, dokumen pelanggan, dan arsip proyek.',
                 'features' => ['Struktur folder rekomendasi', 'Checklist arsip', 'Naming convention', 'Contoh alur kerja'],
                 'icon' => 'ph-folders',
-                'accent' => 'from-slate-500 to-zinc-500',
+                'accent' => 'from-slate-700 to-teal-700',
                 'latest' => true,
             ],
             [
@@ -129,7 +129,7 @@ class StoreData
                 'description' => 'Membantu bisnis jasa agar prospek dari WhatsApp, DM, dan website tidak mudah tercecer.',
                 'features' => ['Kolom status leads', 'Reminder follow-up manual', 'Segmentasi prospek', 'Rekap closing'],
                 'icon' => 'ph-users-three',
-                'accent' => 'from-lime-500 to-emerald-500',
+                'accent' => 'from-emerald-500 to-teal-500',
                 'latest' => false,
             ],
             [
@@ -144,7 +144,7 @@ class StoreData
                 'description' => 'Berguna untuk menjaga konsistensi visual bisnis saat membuat konten, proposal, dan halaman website.',
                 'features' => ['Panduan warna', 'Panduan font', 'Contoh penggunaan logo', 'Moodboard sederhana'],
                 'icon' => 'ph-brush',
-                'accent' => 'from-purple-500 to-pink-500',
+                'accent' => 'from-teal-500 to-amber-500',
                 'latest' => false,
             ],
         ];

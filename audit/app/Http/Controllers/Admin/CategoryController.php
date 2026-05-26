@@ -12,10 +12,46 @@ use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $perPage = $this->perPage($request);
+        $sort = (string) $request->query('sort', 'sort_order');
+        $direction = $request->query('direction') === 'desc' ? 'desc' : 'asc';
+
+        $sortable = [
+            'name' => 'name',
+            'products' => 'products_count',
+            'sort_order' => 'sort_order',
+            'status' => 'is_active',
+            'created_at' => 'created_at',
+        ];
+
+        if (! array_key_exists($sort, $sortable)) {
+            $sort = 'sort_order';
+        }
+
+        $categories = Category::query()
+            ->withCount('products')
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%'.trim((string) $request->query('q')).'%';
+                $query->where('name', 'like', $keyword);
+            })
+            ->when($request->query('status') === 'active', fn ($query) => $query->where('is_active', true))
+            ->when($request->query('status') === 'inactive', fn ($query) => $query->where('is_active', false))
+            ->orderBy($sortable[$sort], $direction)
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('admin.categories.index', [
-            'categories' => Category::withCount('products')->orderBy('sort_order')->latest()->paginate(12),
+            'categories' => $categories,
+            'filters' => [
+                'q' => (string) $request->query('q', ''),
+                'status' => (string) $request->query('status', ''),
+                'per_page' => $perPage,
+                'sort' => $sort,
+                'direction' => $direction,
+            ],
         ]);
     }
 
@@ -69,5 +105,12 @@ class CategoryController extends Controller
             'sort_order' => (int) ($data['sort_order'] ?? 0),
             'is_active' => $request->boolean('is_active'),
         ];
+    }
+
+    private function perPage(Request $request): int
+    {
+        $perPage = (int) $request->query('per_page', 10);
+
+        return in_array($perPage, [10, 25, 50], true) ? $perPage : 10;
     }
 }

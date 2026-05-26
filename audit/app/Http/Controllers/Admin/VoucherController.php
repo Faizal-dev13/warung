@@ -12,10 +12,52 @@ use Illuminate\View\View;
 
 class VoucherController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $perPage = $this->perPage($request);
+        $sort = (string) $request->query('sort', 'created_at');
+        $direction = $request->query('direction') === 'asc' ? 'asc' : 'desc';
+
+        $sortable = [
+            'code' => 'code',
+            'label' => 'label',
+            'type' => 'type',
+            'value' => 'value',
+            'minimum_order' => 'minimum_order',
+            'status' => 'is_active',
+            'created_at' => 'created_at',
+        ];
+
+        if (! array_key_exists($sort, $sortable)) {
+            $sort = 'created_at';
+        }
+
+        $vouchers = Voucher::query()
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%'.trim((string) $request->query('q')).'%';
+                $query->where(function ($subQuery) use ($keyword) {
+                    $subQuery->where('code', 'like', $keyword)
+                        ->orWhere('label', 'like', $keyword);
+                });
+            })
+            ->when($request->query('status') === 'active', fn ($query) => $query->where('is_active', true))
+            ->when($request->query('status') === 'inactive', fn ($query) => $query->where('is_active', false))
+            ->when(in_array($request->query('type'), ['fixed', 'percent'], true), fn ($query) => $query->where('type', $request->query('type')))
+            ->orderBy($sortable[$sort], $direction)
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('admin.vouchers.index', [
-            'vouchers' => Voucher::latest()->paginate(12),
+            'vouchers' => $vouchers,
+            'filters' => [
+                'q' => (string) $request->query('q', ''),
+                'status' => (string) $request->query('status', ''),
+                'type' => (string) $request->query('type', ''),
+                'per_page' => $perPage,
+                'sort' => $sort,
+                'direction' => $direction,
+            ],
         ]);
     }
 
@@ -72,5 +114,12 @@ class VoucherController extends Controller
             'ends_at' => $data['ends_at'] ?? null,
             'is_active' => $request->boolean('is_active'),
         ];
+    }
+
+    private function perPage(Request $request): int
+    {
+        $perPage = (int) $request->query('per_page', 10);
+
+        return in_array($perPage, [10, 25, 50], true) ? $perPage : 10;
     }
 }

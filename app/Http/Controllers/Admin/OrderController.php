@@ -75,6 +75,20 @@ class OrderController extends Controller
         ]);
     }
 
+    public function invoice(Order $order): View
+    {
+        return view('admin.orders.invoice', [
+            'order' => $order->load('items.product'),
+            'statusLabels' => [
+                'waiting_whatsapp_confirmation' => 'Menunggu WA',
+                'confirmed' => 'Dikonfirmasi',
+                'processed' => 'Diproses',
+                'completed' => 'Selesai',
+                'cancelled' => 'Dibatalkan',
+            ],
+        ]);
+    }
+
     public function updateStatus(Request $request, Order $order): RedirectResponse
     {
         $data = $request->validate([
