@@ -48,12 +48,12 @@
                 </span>
                 <span>
                     <span class="block text-lg font-extrabold tracking-tight"><?php echo e($storeName); ?></span>
-                    <span class="hidden text-xs text-slate-500 dark:text-slate-400 sm:block"><?php echo e($headerSubtitle); ?></span>
+                    <span class="block text-[11px] leading-tight text-slate-500 dark:text-slate-400 sm:text-xs"><?php echo e($headerSubtitle); ?></span>
                 </span>
             </a>
 
             <div class="hidden items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300 md:flex">
-                <a class="hover:text-slate-950 dark:hover:text-white" href="<?php echo e(route('home')); ?>#produk">Produk</a>
+                <a class="hover:text-slate-950 dark:hover:text-white" href="<?php echo e(route('products.index')); ?>">Produk</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="<?php echo e(route('home')); ?>#voucher">Voucher</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="<?php echo e(route('guide')); ?>">Panduan</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="<?php echo e(route('qna')); ?>">QnA</a>

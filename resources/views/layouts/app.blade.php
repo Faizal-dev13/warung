@@ -48,12 +48,12 @@
                 </span>
                 <span>
                     <span class="block text-lg font-extrabold tracking-tight">{{ $storeName }}</span>
-                    <span class="hidden text-xs text-slate-500 dark:text-slate-400 sm:block">{{ $headerSubtitle }}</span>
+                    <span class="block text-[11px] leading-tight text-slate-500 dark:text-slate-400 sm:text-xs">{{ $headerSubtitle }}</span>
                 </span>
             </a>
 
             <div class="hidden items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300 md:flex">
-                <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#produk">Produk</a>
+                <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('products.index') }}">Produk</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#voucher">Voucher</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('guide') }}">Panduan</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('qna') }}">QnA</a>

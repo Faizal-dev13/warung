@@ -38,4 +38,6 @@
         @endforelse
     </div>
 </section>
+
+@include('partials.mobile-bottom-menu', ['bottomActive' => 'qna'])
 @endsection

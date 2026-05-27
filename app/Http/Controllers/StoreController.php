@@ -16,36 +16,12 @@ class StoreController extends Controller
 {
     public function home(Request $request): View
     {
-        $filters = [
-            'query' => trim((string) $request->query('q', '')),
-            'category' => (string) $request->query('category', 'all'),
-            'sort' => (string) $request->query('sort', 'popular'),
-        ];
-
-        $variantPriceSql = "select min(price) from product_variants where product_variants.product_id = products.id and product_variants.is_active = 1 and (product_variants.stock is null or product_variants.stock > 0)";
-        $variantDiscountSql = "select max(case when old_price is not null and old_price > price then old_price - price else 0 end) from product_variants where product_variants.product_id = products.id and product_variants.is_active = 1 and (product_variants.stock is null or product_variants.stock > 0)";
-
-        $products = Product::query()
-            ->select('products.*')
-            ->selectRaw("coalesce(($variantPriceSql), products.price) as sort_price")
-            ->selectRaw("coalesce(($variantDiscountSql), case when products.old_price is not null and products.old_price > products.price then products.old_price - products.price else 0 end, 0) as sort_discount")
-            ->with(['category', 'activeVariants'])
-            ->where('is_active', true)
-            ->when($filters['category'] !== 'all', function ($query) use ($filters) {
-                $query->whereHas('category', fn ($category) => $category->where('slug', $filters['category']));
-            })
-            ->when($filters['query'] !== '', function ($query) use ($filters) {
-                $keyword = '%'.$filters['query'].'%';
-                $query->where(function ($search) use ($keyword) {
-                    $search->where('name', 'like', $keyword)
-                        ->orWhere('summary', 'like', $keyword)
-                        ->orWhere('description', 'like', $keyword);
-                });
-            })
-            ->when($filters['sort'] === 'highest', fn ($query) => $query->orderByDesc('sort_price'))
-            ->when($filters['sort'] === 'lowest', fn ($query) => $query->orderBy('sort_price'))
-            ->when($filters['sort'] === 'discount', fn ($query) => $query->orderByDesc('sort_discount')->orderBy('sort_price'))
-            ->when($filters['sort'] === 'popular', fn ($query) => $query->orderBy('sort_order')->orderByDesc('id'))
+        $products = $this->productQuery([
+                'query' => '',
+                'category' => 'all',
+                'sort' => 'popular',
+            ])
+            ->take(8)
             ->get();
 
         return view('pages.home', [
@@ -53,10 +29,63 @@ class StoreController extends Controller
             'categories' => Category::where('is_active', true)->orderBy('sort_order')->get(),
             'products' => $products,
             'vouchers' => Voucher::with('products')->where('is_active', true)->latest()->get(),
+            'filters' => [
+                'query' => '',
+                'category' => 'all',
+                'sort' => 'popular',
+            ],
+            'cart' => $this->cartSummary(),
+            'settings' => Setting::store(),
+        ]);
+    }
+
+    public function products(Request $request): View
+    {
+        $filters = [
+            'query' => trim((string) $request->query('q', '')),
+            'category' => (string) $request->query('category', 'all'),
+            'sort' => (string) $request->query('sort', 'popular'),
+        ];
+
+        $products = $this->productQuery($filters)
+            ->paginate(12)
+            ->withQueryString();
+
+        return view('pages.products', [
+            'categories' => Category::where('is_active', true)->orderBy('sort_order')->get(),
+            'products' => $products,
             'filters' => $filters,
             'cart' => $this->cartSummary(),
             'settings' => Setting::store(),
         ]);
+    }
+
+    private function productQuery(array $filters)
+    {
+        $variantPriceSql = "select min(price) from product_variants where product_variants.product_id = products.id and product_variants.is_active = 1 and (product_variants.stock is null or product_variants.stock > 0)";
+        $variantDiscountSql = "select max(case when old_price is not null and old_price > price then old_price - price else 0 end) from product_variants where product_variants.product_id = products.id and product_variants.is_active = 1 and (product_variants.stock is null or product_variants.stock > 0)";
+
+        return Product::query()
+            ->select('products.*')
+            ->selectRaw("coalesce(($variantPriceSql), products.price) as sort_price")
+            ->selectRaw("coalesce(($variantDiscountSql), case when products.old_price is not null and products.old_price > products.price then products.old_price - products.price else 0 end, 0) as sort_discount")
+            ->with(['category', 'activeVariants'])
+            ->where('is_active', true)
+            ->when(($filters['category'] ?? 'all') !== 'all', function ($query) use ($filters) {
+                $query->whereHas('category', fn ($category) => $category->where('slug', $filters['category']));
+            })
+            ->when(($filters['query'] ?? '') !== '', function ($query) use ($filters) {
+                $keyword = '%'.$filters['query'].'%';
+                $query->where(function ($search) use ($keyword) {
+                    $search->where('name', 'like', $keyword)
+                        ->orWhere('summary', 'like', $keyword)
+                        ->orWhere('description', 'like', $keyword);
+                });
+            })
+            ->when(($filters['sort'] ?? 'popular') === 'highest', fn ($query) => $query->orderByDesc('sort_price'))
+            ->when(($filters['sort'] ?? 'popular') === 'lowest', fn ($query) => $query->orderBy('sort_price'))
+            ->when(($filters['sort'] ?? 'popular') === 'discount', fn ($query) => $query->orderByDesc('sort_discount')->orderBy('sort_price'))
+            ->when(($filters['sort'] ?? 'popular') === 'popular', fn ($query) => $query->orderBy('sort_order')->orderByDesc('id'));
     }
 
     public function guide(): View

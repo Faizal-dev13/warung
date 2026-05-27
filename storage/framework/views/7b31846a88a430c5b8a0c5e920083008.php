@@ -1,7 +1,6 @@
-@extends('layouts.app')
-@section('title', config('store.name').' - Belanja Mudah via WhatsApp')
-@section('content')
-@once
+<?php $__env->startSection('title', config('store.name').' - Belanja Mudah via WhatsApp'); ?>
+<?php $__env->startSection('content'); ?>
+<?php if (! $__env->hasRenderedOnce('94c09435-de17-4d29-bfbd-f644628383e9')): $__env->markAsRenderedOnce('94c09435-de17-4d29-bfbd-f644628383e9'); ?>
     <style>
         html {
             scroll-behavior: smooth;
@@ -208,14 +207,14 @@
             }
         }
     </style>
-@endonce
+<?php endif; ?>
 
 <section id="home" class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
     <div class="grid items-start gap-4 lg:grid-cols-[1.25fr_.75fr] lg:gap-5">
         <div class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-soft dark:border-white/10 dark:bg-white/5 sm:rounded-[2rem]">
             <div data-banner-slider class="relative">
-                @forelse($banners as $banner)
-                    @php
+                <?php $__empty_1 = true; $__currentLoopData = $banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <?php
                         $bannerImagePath = $banner->image_path ?? null;
                         $bannerImageUrl = $bannerImagePath
                             ? (\Illuminate\Support\Str::startsWith($bannerImagePath, ['http://', 'https://', '/']) ? $bannerImagePath : \Illuminate\Support\Facades\Storage::url($bannerImagePath))
@@ -225,40 +224,40 @@
                         $bannerMobileImageUrl = $bannerMobileImagePath
                             ? (\Illuminate\Support\Str::startsWith($bannerMobileImagePath, ['http://', 'https://', '/']) ? $bannerMobileImagePath : \Illuminate\Support\Facades\Storage::url($bannerMobileImagePath))
                             : null;
-                    @endphp
-                    <article data-banner-slide class="{{ $loop->first ? '' : 'hidden' }} relative aspect-[4/3] min-h-0 overflow-hidden {{ $bannerImageUrl ? 'bg-slate-950' : 'bg-gradient-to-br '.($banner->accent ?: 'from-slate-950 to-blue-950') }} p-6 text-white sm:aspect-[8/3] sm:p-10">
-                        @if($bannerImageUrl)
+                    ?>
+                    <article data-banner-slide class="<?php echo e($loop->first ? '' : 'hidden'); ?> relative aspect-[4/3] min-h-0 overflow-hidden <?php echo e($bannerImageUrl ? 'bg-slate-950' : 'bg-gradient-to-br '.($banner->accent ?: 'from-slate-950 to-blue-950')); ?> p-6 text-white sm:aspect-[8/3] sm:p-10">
+                        <?php if($bannerImageUrl): ?>
                             <picture class="absolute inset-0 block h-full w-full">
-                                @if($bannerMobileImageUrl)
-                                    <source media="(max-width: 639px)" srcset="{{ $bannerMobileImageUrl }}">
-                                @endif
-                                <img src="{{ $bannerImageUrl }}" alt="{{ $banner->title }}" class="absolute inset-0 block h-full w-full object-cover">
+                                <?php if($bannerMobileImageUrl): ?>
+                                    <source media="(max-width: 639px)" srcset="<?php echo e($bannerMobileImageUrl); ?>">
+                                <?php endif; ?>
+                                <img src="<?php echo e($bannerImageUrl); ?>" alt="<?php echo e($banner->title); ?>" class="absolute inset-0 block h-full w-full object-cover">
                             </picture>
                             <div class="absolute inset-0 bg-gradient-to-br from-slate-950/82 via-slate-950/55 to-slate-950/20"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent"></div>
-                        @endif
+                        <?php endif; ?>
 
                         <div class="relative z-10 flex h-full flex-col justify-center gap-8">
                             <div>
-                                @if($banner->label)
-                                    <span class="inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 ring-1 ring-white/15 backdrop-blur sm:px-4 sm:text-xs">{{ $banner->label }}</span>
-                                @endif
+                                <?php if($banner->label): ?>
+                                    <span class="inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 ring-1 ring-white/15 backdrop-blur sm:px-4 sm:text-xs"><?php echo e($banner->label); ?></span>
+                                <?php endif; ?>
 
-                                <h1 class="mt-5 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight drop-shadow-sm sm:mt-6 sm:text-5xl">{{ $banner->title }}</h1>
+                                <h1 class="mt-5 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight drop-shadow-sm sm:mt-6 sm:text-5xl"><?php echo e($banner->title); ?></h1>
 
-                                @if($banner->subtitle)
-                                    <p class="mt-4 max-w-xl text-sm leading-7 text-white/78 drop-shadow-sm sm:text-base">{{ $banner->subtitle }}</p>
-                                @endif
+                                <?php if($banner->subtitle): ?>
+                                    <p class="mt-4 max-w-xl text-sm leading-7 text-white/78 drop-shadow-sm sm:text-base"><?php echo e($banner->subtitle); ?></p>
+                                <?php endif; ?>
                             </div>
 
                         </div>
 
-                        @unless($bannerImageUrl)
+                        <?php if (! ($bannerImageUrl)): ?>
                             <div class="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-white/10 blur-2xl sm:h-72 sm:w-72"></div>
-                            <i class="ph {{ $banner->icon ?: 'ph-image-square' }} pointer-events-none absolute bottom-6 right-6 text-7xl text-white/15 sm:bottom-8 sm:right-8 sm:text-9xl"></i>
-                        @endunless
+                            <i class="ph <?php echo e($banner->icon ?: 'ph-image-square'); ?> pointer-events-none absolute bottom-6 right-6 text-7xl text-white/15 sm:bottom-8 sm:right-8 sm:text-9xl"></i>
+                        <?php endif; ?>
                     </article>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <article class="relative aspect-[4/3] min-h-0 overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-6 text-white sm:aspect-[8/3] sm:p-10">
                         <div class="relative z-10 max-w-2xl">
                             <span class="inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 backdrop-blur">Belanja Praktis</span>
@@ -268,15 +267,15 @@
                         <div class="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-white/10 blur-2xl sm:h-72 sm:w-72"></div>
                         <i class="ph ph-shopping-bag-open pointer-events-none absolute bottom-6 right-6 text-7xl text-white/15 sm:bottom-8 sm:right-8 sm:text-9xl"></i>
                     </article>
-                @endforelse
+                <?php endif; ?>
 
-                @if($banners->count() > 1)
+                <?php if($banners->count() > 1): ?>
                     <div class="absolute bottom-5 left-6 z-20 flex gap-2 sm:left-7">
-                        @foreach($banners as $banner)
-                            <button data-banner-dot type="button" class="h-2.5 w-2.5 rounded-full bg-white/40 transition first:bg-white" aria-label="Banner {{ $loop->iteration }}"></button>
-                        @endforeach
+                        <?php $__currentLoopData = $banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <button data-banner-dot type="button" class="h-2.5 w-2.5 rounded-full bg-white/40 transition first:bg-white" aria-label="Banner <?php echo e($loop->iteration); ?>"></button>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
 
@@ -322,7 +321,7 @@
             <p class="text-sm font-extrabold uppercase tracking-wide text-teal-700 dark:text-teal-300">Katalog Produk</p>
             <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Pilih produk yang paling sesuai</h2>
         </div>
-        <a href="{{ route('products.index') }}" class="hidden items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950 md:inline-flex">
+        <a href="<?php echo e(route('products.index')); ?>" class="hidden items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950 md:inline-flex">
             Lihat Selengkapnya <i class="ph ph-arrow-right"></i>
         </a>
     </div>
@@ -343,21 +342,21 @@
     </div>
 
     <div class="home-product-grid grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
-        @forelse($products as $product)
+        <?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <div class="home-product-card min-w-0">
-                @include('products.card', ['product' => $product])
+                <?php echo $__env->make('products.card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             </div>
-        @empty
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="col-span-full rounded-[1.5rem] border border-dashed border-slate-300 bg-white/60 p-8 text-center dark:border-white/15 dark:bg-white/5 sm:rounded-[2rem] sm:p-10">
                 <i class="ph ph-magnifying-glass text-5xl text-slate-400"></i>
                 <h3 class="mt-4 text-lg font-extrabold text-slate-950 dark:text-white sm:text-xl">Produk tidak ditemukan</h3>
                 <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 sm:text-base">Coba gunakan kata kunci lain atau pilih kategori yang berbeda.</p>
             </div>
-        @endforelse
+        <?php endif; ?>
     </div>
 
     <div class="mt-6 flex justify-center">
-        <a href="{{ route('products.index') }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 text-sm font-extrabold text-slate-950 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-white/10 dark:text-white">
+        <a href="<?php echo e(route('products.index')); ?>" class="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 text-sm font-extrabold text-slate-950 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-white/10 dark:text-white">
             Lihat Selengkapnya <i class="ph ph-arrow-right"></i>
         </a>
     </div>
@@ -377,23 +376,23 @@
         </div>
 
         <div class="relative grid gap-3 sm:grid-cols-2 sm:gap-4">
-            @forelse($vouchers as $voucher)
+            <?php $__empty_1 = true; $__currentLoopData = $vouchers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $voucher): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="group rounded-2xl border border-white/10 bg-white/10 p-4 transition hover:-translate-y-1 hover:bg-white/15 sm:rounded-3xl sm:p-5">
                     <div class="flex items-center justify-between gap-3">
                         <div class="min-w-0">
-                            <h3 class="truncate text-xl font-extrabold tracking-wide sm:text-2xl">{{ $voucher->code }}</h3>
-                            <p class="mt-1 line-clamp-2 text-xs leading-5 text-white/65 sm:text-sm">{{ $voucher->label }}</p>
+                            <h3 class="truncate text-xl font-extrabold tracking-wide sm:text-2xl"><?php echo e($voucher->code); ?></h3>
+                            <p class="mt-1 line-clamp-2 text-xs leading-5 text-white/65 sm:text-sm"><?php echo e($voucher->label); ?></p>
                         </div>
-                        <button type="button" data-copy="{{ $voucher->code }}" class="inline-flex shrink-0 items-center gap-1.5 rounded-2xl bg-white px-3.5 py-2.5 text-xs font-extrabold text-slate-950 transition group-hover:scale-105 sm:px-4 sm:py-3 sm:text-sm">
+                        <button type="button" data-copy="<?php echo e($voucher->code); ?>" class="inline-flex shrink-0 items-center gap-1.5 rounded-2xl bg-white px-3.5 py-2.5 text-xs font-extrabold text-slate-950 transition group-hover:scale-105 sm:px-4 sm:py-3 sm:text-sm">
                             <i class="ph ph-copy"></i> Salin
                         </button>
                     </div>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="rounded-2xl border border-white/10 bg-white/10 p-5 text-sm leading-7 text-white/70 sm:rounded-3xl">
                     Belum ada voucher aktif saat ini. Silakan cek kembali promo terbaru secara berkala.
                 </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -448,5 +447,7 @@
 </section>
 
 
-@include('partials.mobile-bottom-menu', ['bottomActive' => 'home'])
-@endsection
+<?php echo $__env->make('partials.mobile-bottom-menu', ['bottomActive' => 'home'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/faizal/Projects/laravel/digitalkit/resources/views/pages/home.blade.php ENDPATH**/ ?>

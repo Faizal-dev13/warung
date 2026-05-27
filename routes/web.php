@@ -16,6 +16,7 @@ use App\Http\Middleware\AdminAuth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StoreController::class, 'home'])->name('home');
+Route::get('/produk', [StoreController::class, 'products'])->name('products.index');
 Route::get('/produk/{slug}', [StoreController::class, 'product'])->name('products.show');
 Route::get('/qna', [StoreController::class, 'qna'])->name('qna');
 

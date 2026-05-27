@@ -23,6 +23,11 @@
             $productImageUrl = Storage::url($productImagePath);
         }
     }
+
+    $productFeatures = collect($product->features ?? [])
+        ->filter(fn ($feature) => filled($feature))
+        ->map(fn ($feature) => trim((string) $feature))
+        ->values();
 @endphp
 
 @extends('layouts.app')
@@ -53,7 +58,6 @@
                     @else
                         <div class="relative flex min-h-[320px] flex-col justify-between overflow-hidden bg-gradient-to-br {{ $product->accent ?: 'from-slate-900 to-teal-900' }} p-7 text-white sm:min-h-[460px] sm:p-8">
                             <div class="absolute -right-16 -top-16 h-60 w-60 rounded-full bg-white/15 blur-3xl"></div>
-                            <span class="relative w-fit rounded-full bg-white/20 px-4 py-2 text-sm font-bold backdrop-blur">{{ $product->badge ?? 'Produk Pilihan' }}</span>
                             <i class="ph {{ $product->icon ?: 'ph-package' }} relative text-8xl drop-shadow"></i>
                             <div class="relative">
                                 <p class="text-sm leading-7 text-white/72">{{ $product->summary }}</p>
@@ -61,42 +65,32 @@
                             </div>
                         </div>
                     @endif
-
-                    <div class="absolute left-4 top-4 flex flex-wrap gap-2">
-                        @if($product->badge)
-                            <span class="rounded-full bg-white/92 px-3 py-1.5 text-xs font-extrabold text-slate-800 shadow-sm ring-1 ring-white/70 backdrop-blur dark:bg-slate-950/80 dark:text-white dark:ring-white/10">{{ $product->badge }}</span>
-                        @endif
-                        @if($hasVariants)
-                            <span class="rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-extrabold text-white shadow-sm">{{ $totalVariants }} varian</span>
-                        @endif
-                    </div>
                 </div>
             </div>
 
-            <div class="mt-4 grid grid-cols-3 gap-3">
-                <div class="rounded-3xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-white/10 dark:bg-white/5">
-                    <i class="ph ph-shield-check text-2xl text-emerald-600 dark:text-emerald-300"></i>
-                    <p class="mt-2 text-[11px] font-extrabold uppercase tracking-wide text-slate-500 dark:text-slate-400">Terpercaya</p>
+            @if($productFeatures->isNotEmpty())
+                <div class="mt-4 grid grid-cols-3 gap-3">
+                    @foreach($productFeatures->take(6) as $feature)
+                        <div class="rounded-3xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-white/10 dark:bg-white/5">
+                            <i class="ph ph-check-circle text-2xl text-emerald-600 dark:text-emerald-300"></i>
+                            <p class="mt-2 line-clamp-2 text-[11px] font-extrabold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ $feature }}</p>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="rounded-3xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-white/10 dark:bg-white/5">
-                    <i class="ph-fill ph-whatsapp-logo text-2xl text-emerald-600 dark:text-emerald-300"></i>
-                    <p class="mt-2 text-[11px] font-extrabold uppercase tracking-wide text-slate-500 dark:text-slate-400">Mudah</p>
-                </div>
-                <div class="rounded-3xl border border-slate-200 bg-white p-4 text-center shadow-sm dark:border-white/10 dark:bg-white/5">
-                    <i class="ph ph-clock-countdown text-2xl text-amber-600 dark:text-amber-300"></i>
-                    <p class="mt-2 text-[11px] font-extrabold uppercase tracking-wide text-slate-500 dark:text-slate-400">Responsif</p>
-                </div>
-            </div>
+            @endif
         </div>
 
         <div>
             <div class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/5 sm:rounded-[2rem] sm:p-7">
                 <div class="flex flex-wrap items-center gap-2">
+                    @if($product->badge)
+                        <span class="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-extrabold text-slate-700 dark:bg-white/10 dark:text-slate-200">{{ $product->badge }}</span>
+                    @endif
                     @if($product->category)
                         <span class="rounded-full bg-teal-50 px-3 py-1.5 text-xs font-extrabold text-teal-700 dark:bg-teal-400/10 dark:text-teal-300">{{ $product->category->name }}</span>
                     @endif
                     @if($hasVariants)
-                        <span class="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-extrabold text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300">Tersedia beberapa pilihan</span>
+                        <span class="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-extrabold text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300">{{ $totalVariants }} pilihan</span>
                     @endif
                 </div>
 
@@ -181,22 +175,6 @@
     </div>
 </section>
 
-@if($related->isNotEmpty())
-<section class="mx-auto max-w-7xl px-4 pb-24 sm:px-6 md:pb-16 lg:px-8">
-    <div class="mb-6 flex items-end justify-between gap-4">
-        <div>
-            <p class="text-sm font-extrabold uppercase tracking-wide text-teal-700 dark:text-teal-300">Produk Terkait</p>
-            <h2 class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">Pilihan lain yang bisa kamu cek</h2>
-        </div>
-        <a href="{{ route('home') }}#produk" class="hidden rounded-2xl border border-slate-200 px-5 py-3 text-sm font-extrabold transition hover:bg-white dark:border-white/10 dark:hover:bg-white/10 sm:inline-flex">Lihat Katalog</a>
-    </div>
-    <div class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-        @foreach($related as $product)
-            @include('products.card', ['product' => $product])
-        @endforeach
-    </div>
-</section>
-@endif
 
 <style>
     [data-variant-option].is-selected {

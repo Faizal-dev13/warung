@@ -39,12 +39,23 @@
             </div>
         </div>
 
+        <div class="mb-5 grid gap-3 lg:grid-cols-2">
+            <div class="rounded-2xl border border-teal-100 bg-teal-50/70 p-4 text-sm leading-6 text-teal-900 dark:border-teal-400/20 dark:bg-teal-400/10 dark:text-teal-100">
+                <b class="block text-xs uppercase tracking-wide">Ukuran desktop</b>
+                Gunakan rasio lebar, rekomendasi <b>1920 × 720 px</b> atau rasio <b>16:6</b>. Pastikan teks utama tidak terlalu dekat tepi gambar.
+            </div>
+            <div class="rounded-2xl border border-amber-100 bg-amber-50/80 p-4 text-sm leading-6 text-amber-900 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100">
+                <b class="block text-xs uppercase tracking-wide">Ukuran mobile</b>
+                Gunakan gambar khusus HP, rekomendasi <b>1080 × 810 px</b> atau rasio <b>4:3</b> agar banner tetap rapi di layar kecil.
+            </div>
+        </div>
+
         <div class="grid gap-5 lg:grid-cols-2">
             <div class="rounded-[1.35rem] border border-slate-200 p-4 dark:border-slate-800">
                 <div class="mb-3 flex items-center justify-between gap-3">
                     <div>
                         <h3 class="text-sm font-extrabold">Gambar Utama</h3>
-                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Gunakan gambar lebar dengan visual yang jelas</p>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Gunakan gambar lebar dengan visual yang jelas. Rekomendasi 1920 × 720 px.</p>
                     </div>
                     <span class="rounded-full bg-teal-50 px-3 py-1 text-[11px] font-extrabold text-teal-700 dark:bg-teal-400/10 dark:text-teal-300">Utama</span>
                 </div>
@@ -67,12 +78,12 @@
                 <div class="mb-3 flex items-center justify-between gap-3">
                     <div>
                         <h3 class="text-sm font-extrabold">Gambar Tampilan HP</h3>
-                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Gunakan gambar vertikal jika ingin tampilan HP lebih rapi</p>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Gunakan gambar khusus HP dengan tinggi lebih ringkas agar banner tidak terlalu panjang. Rekomendasi 1080 × 810 px.</p>
                     </div>
                     <span class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-extrabold text-slate-500 dark:bg-slate-800 dark:text-slate-300">Pilihan</span>
                 </div>
                 <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800">
-                    <div class="aspect-[4/5] w-full max-w-[280px]">
+                    <div class="aspect-[4/3] w-full max-w-[280px]">
                         <img data-preview="mobile" src="{{ $mobileImageUrl ?: '' }}" alt="Gambar tampilan HP" class="{{ $mobileImageUrl ? '' : 'hidden' }} h-full w-full object-cover">
                         <div data-placeholder="mobile" class="{{ $mobileImageUrl ? 'hidden' : '' }} flex h-full w-full flex-col items-center justify-center p-5 text-center text-slate-400">
                             <i class="ph ph-device-mobile text-4xl"></i>

@@ -53,30 +53,6 @@
             'accent' => 'from-emerald-500 to-teal-500',
         ],
     ];
-
-    $quickActions = [
-        [
-            'label' => 'Tambah Produk',
-            'description' => 'Lengkapi katalog dengan item baru',
-            'route' => route('admin.products.create'),
-            'icon' => 'ph-plus-circle',
-            'tone' => 'bg-teal-50 text-teal-700 dark:bg-teal-400/10 dark:text-teal-300',
-        ],
-        [
-            'label' => 'Buat Voucher',
-            'description' => 'Siapkan promo untuk customer',
-            'route' => route('admin.vouchers.create'),
-            'icon' => 'ph-ticket',
-            'tone' => 'bg-amber-50 text-amber-700 dark:bg-amber-400/10 dark:text-amber-300',
-        ],
-        [
-            'label' => 'Atur Banner',
-            'description' => 'Perbarui tampilan halaman depan',
-            'route' => route('admin.banners.create'),
-            'icon' => 'ph-images',
-            'tone' => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200',
-        ],
-    ];
 @endphp
 
 <section class="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-soft dark:border-slate-800 sm:p-6 lg:p-7">
@@ -244,34 +220,6 @@
     </div>
 
     <aside class="grid gap-5">
-        <section class="rounded-[1.7rem] border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:p-6">
-            <div class="flex items-start justify-between gap-3">
-                <div>
-                    <h2 class="text-xl font-extrabold text-slate-950 dark:text-white">Aksi Cepat</h2>
-                    <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
-                        Perbarui konten toko tanpa masuk ke banyak menu.
-                    </p>
-                </div>
-                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal-50 text-teal-700 dark:bg-teal-400/10 dark:text-teal-300">
-                    <i class="ph ph-lightning text-xl"></i>
-                </span>
-            </div>
-
-            <div class="mt-5 grid gap-3">
-                @foreach($quickActions as $action)
-                    <a href="{{ $action['route'] }}" class="group flex items-center gap-3 rounded-3xl border border-slate-200 p-4 transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-sm dark:border-slate-800 dark:hover:bg-slate-800/50">
-                        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl {{ $action['tone'] }}">
-                            <i class="ph {{ $action['icon'] }} text-xl"></i>
-                        </span>
-                        <span class="min-w-0 flex-1">
-                            <span class="block text-sm font-extrabold text-slate-900 dark:text-white">{{ $action['label'] }}</span>
-                            <span class="mt-0.5 block text-xs font-semibold leading-5 text-slate-500 dark:text-slate-400">{{ $action['description'] }}</span>
-                        </span>
-                        <i class="ph ph-arrow-right shrink-0 text-slate-400 transition group-hover:translate-x-1 group-hover:text-teal-600 dark:group-hover:text-teal-300"></i>
-                    </a>
-                @endforeach
-            </div>
-        </section>
 
         <section class="rounded-[1.7rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-emerald-50 p-5 shadow-soft dark:border-teal-400/20 dark:from-teal-400/10 dark:via-slate-900 dark:to-emerald-400/10 sm:p-6">
             <div class="flex items-center gap-3">
