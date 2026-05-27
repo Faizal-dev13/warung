@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Qna;
+use App\Models\Setting;
 use App\Models\Voucher;
 use App\Support\Money;
 use Illuminate\Contracts\View\View;
@@ -50,9 +52,27 @@ class StoreController extends Controller
             'banners' => Banner::where('is_active', true)->orderBy('sort_order')->get(),
             'categories' => Category::where('is_active', true)->orderBy('sort_order')->get(),
             'products' => $products,
-            'vouchers' => Voucher::where('is_active', true)->latest()->get(),
+            'vouchers' => Voucher::with('products')->where('is_active', true)->latest()->get(),
             'filters' => $filters,
             'cart' => $this->cartSummary(),
+            'settings' => Setting::store(),
+        ]);
+    }
+
+    public function guide(): View
+    {
+        return view('pages.guide', [
+            'cart' => $this->cartSummary(),
+            'settings' => Setting::store(),
+        ]);
+    }
+
+    public function qna(): View
+    {
+        return view('pages.qna', [
+            'qnas' => Qna::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get(),
+            'cart' => $this->cartSummary(),
+            'settings' => Setting::store(),
         ]);
     }
 
@@ -70,6 +90,7 @@ class StoreController extends Controller
                 ->take(3)
                 ->get(),
             'cart' => $this->cartSummary(),
+            'settings' => Setting::store(),
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Setting;
 use App\Models\Voucher;
 use App\Support\Money;
 use Illuminate\Http\JsonResponse;
@@ -113,8 +114,7 @@ class CartController extends Controller
 
         $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
         $voucherCode = Str::upper(trim((string) ($validated['voucher'] ?? '')));
-        $voucher = $voucherCode !== '' ? Voucher::where('code', $voucherCode)->first() : null;
-        $discount = $voucher?->discountFor($subtotal) ?? 0;
+        [$voucher, $discount] = $this->resolveVoucherDiscount($cart, $voucherCode);
         $total = max(0, $subtotal - $discount);
         $invoice = 'INV-'.now()->format('YmdHis').'-'.Str::upper(Str::random(4));
 
@@ -160,9 +160,61 @@ class CartController extends Controller
 
         session()->forget('cart');
 
-        $wa = preg_replace('/\D+/', '', (string) config('store.whatsapp'));
+        $wa = Setting::whatsappNumber();
 
         return redirect()->away('https://wa.me/'.$wa.'?text='.rawurlencode($order->whatsapp_message));
+    }
+
+    public function previewVoucher(Request $request): JsonResponse
+    {
+        $cart = session('cart', []);
+        $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
+        $voucherCode = Str::upper(trim((string) $request->input('voucher', '')));
+
+        if ($voucherCode === '') {
+            return response()->json([
+                'ok' => true,
+                'message' => '',
+                'discount' => 0,
+                'discount_formatted' => Money::rupiah(0),
+                'total' => $subtotal,
+                'total_formatted' => Money::rupiah($subtotal),
+            ]);
+        }
+
+        [$voucher, $discount, $message] = $this->resolveVoucherDiscount($cart, $voucherCode);
+        $total = max(0, $subtotal - $discount);
+
+        return response()->json([
+            'ok' => $discount > 0,
+            'message' => $message,
+            'voucher_code' => $voucher?->code,
+            'discount' => $discount,
+            'discount_formatted' => Money::rupiah($discount),
+            'total' => $total,
+            'total_formatted' => Money::rupiah($total),
+        ], $discount > 0 ? 200 : 422);
+    }
+
+    private function resolveVoucherDiscount(array $cart, string $voucherCode): array
+    {
+        if ($voucherCode === '') {
+            return [null, 0, ''];
+        }
+
+        $voucher = Voucher::with('products')->where('code', $voucherCode)->first();
+
+        if (! $voucher) {
+            return [null, 0, 'Kode voucher tidak ditemukan.'];
+        }
+
+        $discount = $voucher->discountForCart($cart);
+
+        if ($discount <= 0) {
+            return [$voucher, 0, 'Voucher belum bisa digunakan untuk produk di keranjang.'];
+        }
+
+        return [$voucher, $discount, 'Voucher berhasil digunakan.'];
     }
 
     private function selectedVariant(Request $request, Product $product): ?ProductVariant
@@ -261,8 +313,10 @@ class CartController extends Controller
 
     private function buildWhatsappMessage(string $invoice, array $customer, array $cart, int $subtotal, int $discount, int $total, string $voucherCode): string
     {
+        $storeName = Setting::getValue('store_name', config('store.name', 'DigitalKit'));
+
         $lines = [
-            '*Checkout Produk Digital*',
+            '*Checkout '.$storeName.'*',
             'Invoice: '.$invoice,
             'Nama: '.$customer['name'],
         ];

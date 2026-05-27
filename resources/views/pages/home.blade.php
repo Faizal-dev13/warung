@@ -431,11 +431,10 @@
             <i class="ph ph-ticket text-lg"></i>
             Promo
         </a>
-        <button data-cart-toggle type="button" class="mobile-bottom-action">
-            <span data-cart-count-badge class="absolute right-2 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-rose-500 px-1 text-[9px] font-extrabold text-white {{ ($cart['count'] ?? 0) > 0 ? '' : 'hidden' }}">{{ $cart['count'] ?? 0 }}</span>
-            <i class="ph ph-shopping-cart-simple text-lg"></i>
-            Checkout
-        </button>
+        <a href="{{ route('qna') }}" class="mobile-bottom-action">
+            <i class="ph ph-question text-lg"></i>
+            QnA
+        </a>
     </div>
 </nav>
 

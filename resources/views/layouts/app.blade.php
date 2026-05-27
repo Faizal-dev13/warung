@@ -1,11 +1,18 @@
+@php
+    $storeSettings = $settings ?? \App\Models\Setting::store();
+    $storeName = $storeSettings['store_name'] ?? config('store.name');
+    $storeTagline = $storeSettings['store_tagline'] ?? config('store.tagline');
+    $headerSubtitle = $storeSettings['header_subtitle'] ?? 'Produk digital siap checkout WA';
+    $storeLogoUrl = \App\Models\Setting::logoUrl();
+@endphp
 <!doctype html>
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('store.name'))</title>
-    <meta name="description" content="{{ config('store.tagline') }}">
+    <title>@yield('title', $storeName)</title>
+    <meta name="description" content="{{ $storeTagline }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,12 +39,16 @@
     <div class="fixed inset-x-0 top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
             <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                <span class="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white shadow-soft transition group-hover:-rotate-3 dark:bg-white dark:text-slate-950">
-                    <i class="ph-bold ph-cube-transparent text-2xl"></i>
+                <span class="grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-slate-950 text-white shadow-soft transition group-hover:-rotate-3 dark:bg-white dark:text-slate-950">
+                    @if($storeLogoUrl)
+                        <img src="{{ $storeLogoUrl }}" alt="{{ $storeName }}" class="h-full w-full object-cover">
+                    @else
+                        <i class="ph-bold ph-cube-transparent text-2xl"></i>
+                    @endif
                 </span>
                 <span>
-                    <span class="block text-lg font-extrabold tracking-tight">{{ config('store.name') }}</span>
-                    <span class="hidden text-xs text-slate-500 dark:text-slate-400 sm:block">Produk digital siap checkout WA</span>
+                    <span class="block text-lg font-extrabold tracking-tight">{{ $storeName }}</span>
+                    <span class="hidden text-xs text-slate-500 dark:text-slate-400 sm:block">{{ $headerSubtitle }}</span>
                 </span>
             </a>
 
@@ -45,6 +56,7 @@
                 <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#produk">Produk</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('home') }}#voucher">Voucher</a>
                 <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('guide') }}">Panduan</a>
+                <a class="hover:text-slate-950 dark:hover:text-white" href="{{ route('qna') }}">QnA</a>
             </div>
 
             <div class="flex items-center gap-2">
@@ -105,7 +117,8 @@
                     <div class="flex items-center justify-between gap-4">
                         <div>
                             <p class="text-xs font-extrabold uppercase tracking-wide text-slate-500 dark:text-slate-400">Total Pesanan</p>
-                            <strong data-cart-subtotal class="mt-1 block text-2xl font-extrabold text-slate-950 dark:text-white">{{ $cart['subtotal_formatted'] ?? 'Rp0' }}</strong>
+                            <strong data-cart-subtotal data-checkout-total class="mt-1 block text-2xl font-extrabold text-slate-950 dark:text-white">{{ $cart['subtotal_formatted'] ?? 'Rp0' }}</strong>
+                            <p data-voucher-feedback class="mt-1 hidden text-xs font-extrabold text-emerald-700 dark:text-emerald-300"></p>
                         </div>
                         <span class="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-600/20">
                             <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
@@ -126,7 +139,7 @@
                         </label>
                         <label class="relative block">
                             <i class="ph ph-ticket absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input name="voucher" placeholder="Voucher" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-semibold uppercase outline-none transition placeholder:normal-case placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-emerald-300">
+                            <input name="voucher" data-voucher-input data-voucher-preview-url="{{ route('voucher.preview') }}" placeholder="Voucher" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-semibold uppercase outline-none transition placeholder:normal-case placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-emerald-300">
                         </label>
                     </div>
                     <textarea name="note" rows="2" placeholder="Catatan tambahan, jika ada" class="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:focus:border-emerald-300"></textarea>
@@ -150,7 +163,11 @@
             const subtotalTarget = document.querySelector('[data-cart-subtotal]');
             const toast = document.querySelector('[data-cart-toast]');
             const toastMessage = document.querySelector('[data-cart-toast-message]');
+            const voucherInput = document.querySelector('[data-voucher-input]');
+            const checkoutTotalTarget = document.querySelector('[data-checkout-total]');
+            const voucherFeedback = document.querySelector('[data-voucher-feedback]');
             let toastTimer;
+            let voucherTimer;
 
             const openCart = () => {
                 if (!panel || !overlay) return;
@@ -199,6 +216,64 @@
                 });
             };
 
+            const resetVoucherPreview = () => {
+                if (checkoutTotalTarget && subtotalTarget) {
+                    checkoutTotalTarget.textContent = subtotalTarget.textContent;
+                }
+                if (voucherFeedback) {
+                    voucherFeedback.textContent = '';
+                    voucherFeedback.classList.add('hidden');
+                    voucherFeedback.classList.remove('text-rose-600', 'dark:text-rose-300');
+                    voucherFeedback.classList.add('text-emerald-700', 'dark:text-emerald-300');
+                }
+            };
+
+            const refreshVoucherPreview = async () => {
+                if (!voucherInput) return;
+
+                const code = voucherInput.value.trim();
+                if (!code) {
+                    resetVoucherPreview();
+                    return;
+                }
+
+                try {
+                    const formData = new FormData();
+                    formData.append('voucher', code);
+
+                    const response = await fetch(voucherInput.dataset.voucherPreviewUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: formData,
+                    });
+
+                    const data = await response.json();
+
+                    if (checkoutTotalTarget && data.total_formatted) {
+                        checkoutTotalTarget.textContent = data.total_formatted;
+                    }
+
+                    if (voucherFeedback) {
+                        voucherFeedback.textContent = data.ok
+                            ? `${data.message} Hemat ${data.discount_formatted}.`
+                            : (data.message || 'Voucher belum bisa digunakan.');
+                        voucherFeedback.classList.remove('hidden', 'text-emerald-700', 'dark:text-emerald-300', 'text-rose-600', 'dark:text-rose-300');
+                        voucherFeedback.classList.add(data.ok ? 'text-emerald-700' : 'text-rose-600', data.ok ? 'dark:text-emerald-300' : 'dark:text-rose-300');
+                    }
+                } catch (error) {
+                    resetVoucherPreview();
+                }
+            };
+
+            voucherInput?.addEventListener('input', () => {
+                window.clearTimeout(voucherTimer);
+                voucherTimer = window.setTimeout(refreshVoucherPreview, 350);
+            });
+
             document.querySelectorAll('[data-cart-toggle]').forEach((button) => button.addEventListener('click', openCart));
             document.querySelectorAll('[data-cart-close]').forEach((button) => button.addEventListener('click', closeCart));
             overlay?.addEventListener('click', closeCart);
@@ -239,6 +314,7 @@
                     }
 
                     updateBadges(data.cart?.count || 0);
+                    await refreshVoucherPreview();
                     showToast(data.message || 'Keranjang diperbarui.');
 
                     if (form.matches('[data-cart-open="true"]')) {

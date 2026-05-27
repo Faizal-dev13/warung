@@ -13,7 +13,8 @@
         .page { width: 210mm; min-height: 297mm; margin: 24px auto; background: #fff; padding: 20mm; box-shadow: 0 20px 60px rgba(15,23,42,.18); }
         .top { display: flex; justify-content: space-between; gap: 24px; border-bottom: 2px solid #0f766e; padding-bottom: 18px; }
         .brand { display: flex; gap: 12px; align-items: center; }
-        .logo { width: 48px; height: 48px; border-radius: 16px; background: #0f766e; color: #fff; display: grid; place-items: center; font-weight: 800; }
+        .logo { width: 48px; height: 48px; border-radius: 16px; background: #0f766e; color: #fff; display: grid; place-items: center; font-weight: 800; overflow: hidden; }
+        .logo img { width: 100%; height: 100%; object-fit: cover; }
         h1, h2, p { margin: 0; }
         h1 { font-size: 28px; line-height: 1; }
         .muted { color: #64748b; font-size: 12px; line-height: 1.7; }
@@ -47,6 +48,10 @@
     </style>
 </head>
 <body>
+    @php
+        $invoiceLogoUrl = \App\Models\Setting::logoUrl();
+        $invoiceStoreName = \App\Models\Setting::getValue('store_name', config('store.name'));
+    @endphp
     <div class="actions">
         <button class="btn" onclick="window.print()">Cetak / Simpan PDF</button>
         <button class="btn secondary" onclick="window.close()">Tutup</button>
@@ -55,9 +60,9 @@
     <main class="page">
         <section class="top">
             <div class="brand">
-                <div class="logo">DK</div>
+                <div class="logo">@if($invoiceLogoUrl)<img src="{{ $invoiceLogoUrl }}" alt="{{ $invoiceStoreName }}">@else{{ strtoupper(substr($invoiceStoreName, 0, 2)) }}@endif</div>
                 <div>
-                    <h1>DigitalKit</h1>
+                    <h1>{{ $invoiceStoreName }}</h1>
                     <p class="muted">Invoice pesanan customer</p>
                 </div>
             </div>

@@ -1,9 +1,13 @@
+@php
+    $adminStoreName = \App\Models\Setting::getValue('store_name', config('store.name'));
+    $adminLogoUrl = \App\Models\Setting::logoUrl();
+@endphp
 <!doctype html>
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('page_title', 'Dashboard') - DigitalKit</title>
+    <title>@yield('page_title', 'Dashboard') - {{ $adminStoreName }}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -189,6 +193,8 @@
         ['Produk','admin.products.index','ph-package'],
         ['Varian','admin.variants.index','ph-stack'],
         ['Voucher','admin.vouchers.index','ph-ticket'],
+        ['QnA','admin.qnas.index','ph-question'],
+        ['Settings','admin.settings.edit','ph-gear-six'],
         ['Banner','admin.banners.index','ph-images'],
         ['Order','admin.orders.index','ph-receipt'],
     ];
@@ -204,11 +210,15 @@
 <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 flex w-80 max-w-[86vw] -translate-x-full flex-col border-r border-white/10 bg-slate-950 text-white shadow-sidebar transition-transform duration-300 lg:w-72 lg:translate-x-0">
     <div class="flex items-center justify-between gap-3 border-b border-white/10 p-5">
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-            <span class="grid h-12 w-12 place-items-center rounded-2xl bg-teal-600 text-white shadow-lg shadow-teal-900/30">
-                <i class="ph ph-storefront text-2xl"></i>
+            <span class="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl bg-teal-600 text-white shadow-lg shadow-teal-900/30">
+                @if($adminLogoUrl)
+                    <img src="{{ $adminLogoUrl }}" alt="{{ $adminStoreName }}" class="h-full w-full object-cover">
+                @else
+                    <i class="ph ph-storefront text-2xl"></i>
+                @endif
             </span>
             <span class="leading-tight">
-                <span class="block text-lg font-extrabold tracking-tight">DigitalKit</span>
+                <span class="block text-lg font-extrabold tracking-tight">{{ $adminStoreName }}</span>
                 <span class="text-xs font-bold uppercase tracking-[.2em] text-teal-200/80">Admin</span>
             </span>
         </a>
@@ -272,8 +282,14 @@
                 <i class="ph ph-list text-xl"></i>
             </button>
             <a href="{{ route('admin.dashboard') }}" class="flex min-w-0 items-center gap-2 font-extrabold text-slate-950 dark:text-white">
-                <span class="grid h-10 w-10 place-items-center rounded-2xl bg-teal-700 text-white"><i class="ph ph-storefront text-lg"></i></span>
-                <span class="truncate leading-tight">DigitalKit<span class="block text-[10px] font-bold uppercase tracking-[.18em] text-teal-700 dark:text-teal-300">Admin</span></span>
+                <span class="grid h-10 w-10 place-items-center overflow-hidden rounded-2xl bg-teal-700 text-white">
+                    @if($adminLogoUrl)
+                        <img src="{{ $adminLogoUrl }}" alt="{{ $adminStoreName }}" class="h-full w-full object-cover">
+                    @else
+                        <i class="ph ph-storefront text-lg"></i>
+                    @endif
+                </span>
+                <span class="truncate leading-tight">{{ $adminStoreName }}<span class="block text-[10px] font-bold uppercase tracking-[.18em] text-teal-700 dark:text-teal-300">Admin</span></span>
             </a>
             <button type="button" onclick="toggleTheme()" class="mobile-admin-action grid h-11 w-11 place-items-center rounded-2xl border shadow-sm transition hover:bg-slate-50" aria-label="Ganti mode tampilan">
                 <i class="ph ph-moon-stars text-lg"></i>

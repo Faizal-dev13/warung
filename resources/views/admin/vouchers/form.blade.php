@@ -59,6 +59,30 @@
                 <input name="ends_at" type="datetime-local" value="{{ old('ends_at', optional($voucher->ends_at)->format('Y-m-d\TH:i')) }}" class="admin-input">
             </label>
         </div>
+
+        <div class="border-t border-slate-100 p-5 dark:border-slate-800 sm:p-6">
+            <div class="mb-4 flex items-start gap-3">
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal-50 text-teal-700 dark:bg-teal-400/10 dark:text-teal-300"><i class="ph ph-package text-xl"></i></span>
+                <div>
+                    <h3 class="font-extrabold text-slate-950 dark:text-white">Produk yang Mendapat Promo</h3>
+                    <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Kosongkan pilihan jika voucher bisa dipakai untuk semua produk.</p>
+                </div>
+            </div>
+            <div class="grid max-h-72 gap-2 overflow-y-auto rounded-3xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950/40 sm:grid-cols-2 lg:grid-cols-3">
+                @forelse($products as $product)
+                    @php $selectedProductIds = old('product_ids', $selectedProducts ?? []); @endphp
+                    <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm transition hover:border-teal-200 hover:bg-teal-50/50 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-teal-400/40 dark:hover:bg-teal-400/10">
+                        <input type="checkbox" name="product_ids[]" value="{{ $product->id }}" class="mt-1 h-4 w-4 rounded border-slate-300 text-teal-700 focus:ring-teal-600" @checked(in_array((string) $product->id, array_map('strval', $selectedProductIds), true))>
+                        <span class="min-w-0">
+                            <b class="line-clamp-2 text-slate-950 dark:text-white">{{ $product->name }}</b>
+                            <small class="mt-1 block text-slate-500 dark:text-slate-400">{{ $product->category?->name ?? 'Tanpa kategori' }}</small>
+                        </span>
+                    </label>
+                @empty
+                    <div class="rounded-2xl border border-dashed border-slate-300 p-5 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400 sm:col-span-2 lg:col-span-3">Belum ada produk yang bisa dipilih.</div>
+                @endforelse
+            </div>
+        </div>
     </section>
 
     <div class="sticky bottom-4 z-10 flex flex-col-reverse gap-3 rounded-3xl border border-slate-200 bg-white/90 p-3 shadow-soft backdrop-blur dark:border-slate-800 dark:bg-slate-900/90 sm:flex-row sm:items-center sm:justify-end">

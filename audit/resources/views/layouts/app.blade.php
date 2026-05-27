@@ -154,7 +154,7 @@
 
             const openCart = () => {
                 if (!panel || !overlay) return;
-                panel.classList.remove('translate-x-full', 'translate-y-full');
+                panel.classList.remove('translate-x-full', 'translate-y-full', 'sm:translate-x-full');
                 overlay.classList.remove('pointer-events-none', 'bg-slate-950/0');
                 overlay.classList.add('bg-slate-950/45');
                 document.documentElement.classList.add('overflow-hidden');
@@ -162,7 +162,8 @@
 
             const closeCart = () => {
                 if (!panel || !overlay) return;
-                panel.classList.add('translate-x-full', 'translate-y-full');
+                panel.classList.remove('translate-x-full');
+                panel.classList.add('translate-y-full', 'sm:translate-x-full');
                 overlay.classList.add('pointer-events-none', 'bg-slate-950/0');
                 overlay.classList.remove('bg-slate-950/45');
                 document.documentElement.classList.remove('overflow-hidden');

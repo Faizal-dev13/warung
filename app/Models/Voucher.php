@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Voucher extends Model
 {
@@ -18,6 +19,21 @@ class Voucher extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
+
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class)->withTimestamps();
+    }
+
+    public function appliesToAllProducts(): bool
+    {
+        if ($this->relationLoaded('products')) {
+            return $this->products->isEmpty();
+        }
+
+        return ! $this->products()->exists();
+    }
 
     public function isUsableFor(int $subtotal): bool
     {
@@ -37,8 +53,45 @@ class Voucher extends Model
             return 0;
         }
 
+        return $this->calculateDiscount($subtotal);
+    }
+
+    public function eligibleSubtotalForCart(array $cart): int
+    {
+        $productIds = $this->relationLoaded('products')
+            ? $this->products->pluck('id')->map(fn ($id) => (int) $id)->all()
+            : $this->products()->pluck('products.id')->map(fn ($id) => (int) $id)->all();
+
+        return collect($cart)->sum(function ($item) use ($productIds) {
+            $productId = (int) ($item['product_id'] ?? $item['id'] ?? 0);
+
+            if ($productIds !== [] && ! in_array($productId, $productIds, true)) {
+                return 0;
+            }
+
+            return (int) ($item['price'] ?? 0) * (int) ($item['qty'] ?? 0);
+        });
+    }
+
+    public function discountForCart(array $cart): int
+    {
+        $eligibleSubtotal = $this->eligibleSubtotalForCart($cart);
+
+        if (! $this->isUsableFor($eligibleSubtotal)) {
+            return 0;
+        }
+
+        return $this->calculateDiscount($eligibleSubtotal);
+    }
+
+    private function calculateDiscount(int $subtotal): int
+    {
+        if ($subtotal <= 0) {
+            return 0;
+        }
+
         return $this->type === 'fixed'
-            ? min($this->value, $subtotal)
-            : (int) floor($subtotal * ($this->value / 100));
+            ? min((int) $this->value, $subtotal)
+            : min($subtotal, (int) floor($subtotal * ((int) $this->value / 100)));
     }
 }

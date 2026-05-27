@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Admin - DigitalKit</title>
+    <title>Login Admin - {{ \App\Models\Setting::getValue('store_name', config('store.name')) }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,14 +17,14 @@
             <div class="pointer-events-none absolute bottom-16 right-10 h-96 w-96 rounded-full bg-amber-400/10 blur-3xl"></div>
             <a href="{{ route('home') }}" class="relative flex w-fit items-center gap-3">
                 <span class="grid h-12 w-12 place-items-center rounded-2xl bg-teal-600 shadow-lg shadow-teal-900/30"><i class="ph ph-storefront text-2xl"></i></span>
-                <span><b class="block text-lg">DigitalKit</b><small class="text-slate-400">Admin Panel</small></span>
+                <span><b class="block text-lg">{{ \App\Models\Setting::getValue('store_name', config('store.name')) }}</b><small class="text-slate-400">Admin Panel</small></span>
             </a>
             <div class="relative max-w-2xl">
                 <span class="inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[.2em] text-teal-100">Back Office</span>
                 <h1 class="mt-6 text-5xl font-extrabold leading-tight">Kelola katalog dan pesanan dari satu tempat.</h1>
                 <p class="mt-5 max-w-xl text-base leading-8 text-slate-300">Masuk untuk mengatur produk, promo, banner, dan order customer dengan tampilan yang rapi dan mudah digunakan.</p>
             </div>
-            <p class="relative text-sm font-semibold text-slate-500">© {{ date('Y') }} DigitalKit</p>
+            <p class="relative text-sm font-semibold text-slate-500">© {{ date('Y') }} {{ \App\Models\Setting::getValue('store_name', config('store.name')) }}</p>
         </section>
 
         <section class="relative grid min-h-screen place-items-center p-4 sm:p-6">

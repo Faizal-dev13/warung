@@ -118,7 +118,9 @@
                         <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-teal-50 text-teal-700 dark:bg-teal-400/10 dark:text-teal-300"><i class="ph ph-stack text-xl"></i></span>
                     </div>
                     @if($product->exists)
-                        @php($variants = $product->variants ?? collect())
+                        @php
+                            $variants = $product->variants ?? collect();
+                        @endphp
                         <div class="mt-4 grid gap-2">
                             @forelse($variants->take(3) as $variant)
                                 <div class="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 p-3 text-sm dark:bg-slate-800/60">

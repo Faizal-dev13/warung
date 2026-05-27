@@ -1,6 +1,6 @@
 <?php $__env->startSection('title', config('store.name').' - Belanja Mudah via WhatsApp'); ?>
 <?php $__env->startSection('content'); ?>
-<?php if (! $__env->hasRenderedOnce('1c9fe5c3-321f-4f66-bbbf-c7d561a45ac8')): $__env->markAsRenderedOnce('1c9fe5c3-321f-4f66-bbbf-c7d561a45ac8'); ?>
+<?php if (! $__env->hasRenderedOnce('ce8421a5-0489-4258-9c40-aef0dbca8d5b')): $__env->markAsRenderedOnce('ce8421a5-0489-4258-9c40-aef0dbca8d5b'); ?>
     <style>
         html {
             scroll-behavior: smooth;
@@ -430,11 +430,10 @@
             <i class="ph ph-ticket text-lg"></i>
             Promo
         </a>
-        <button data-cart-toggle type="button" class="mobile-bottom-action">
-            <span data-cart-count-badge class="absolute right-2 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-rose-500 px-1 text-[9px] font-extrabold text-white <?php echo e(($cart['count'] ?? 0) > 0 ? '' : 'hidden'); ?>"><?php echo e($cart['count'] ?? 0); ?></span>
-            <i class="ph ph-shopping-cart-simple text-lg"></i>
-            Checkout
-        </button>
+        <a href="<?php echo e(route('qna')); ?>" class="mobile-bottom-action">
+            <i class="ph ph-question text-lg"></i>
+            QnA
+        </a>
     </div>
 </nav>
 

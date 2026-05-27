@@ -26,7 +26,7 @@
 ?>
 
 
-<?php $__env->startSection('title', $product->name.' - '.config('store.name')); ?>
+<?php $__env->startSection('title', $product->name.' - '.($settings['store_name'] ?? \App\Models\Setting::getValue('store_name', config('store.name')))); ?>
 <?php $__env->startSection('content'); ?>
 <section class="mx-auto max-w-7xl px-4 py-5 pb-24 sm:px-6 sm:py-8 lg:px-8 lg:py-12">
     <div class="mb-5 flex items-center justify-between gap-3">
@@ -132,7 +132,7 @@
                                 <?php
                                     $isAvailable = is_null($variant->stock) || (int) $variant->stock > 0;
                                 ?>
-                                <label class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-4 transition has-[:checked]:border-teal-600 has-[:checked]:bg-teal-50 has-[:checked]:shadow-md dark:border-white/10 dark:bg-white/5 dark:has-[:checked]:border-teal-400 dark:has-[:checked]:bg-teal-400/10 sm:p-5 <?php echo e($isAvailable ? 'cursor-pointer hover:border-teal-300 hover:bg-teal-50/70 dark:hover:border-teal-400/50 dark:hover:bg-teal-400/10' : 'cursor-not-allowed opacity-55'); ?>">
+                                <label data-variant-option class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-4 transition has-[:checked]:border-teal-600 has-[:checked]:bg-teal-50 has-[:checked]:shadow-md dark:border-white/10 dark:bg-white/5 dark:has-[:checked]:border-teal-400 dark:has-[:checked]:bg-teal-400/10 sm:p-5 <?php echo e($isAvailable ? 'cursor-pointer hover:border-teal-300 hover:bg-teal-50/70 dark:hover:border-teal-400/50 dark:hover:bg-teal-400/10' : 'cursor-not-allowed opacity-55'); ?>">
                                     <input type="radio" name="variant_id" value="<?php echo e($variant->id); ?>" class="peer sr-only" <?php if($variant->id === $defaultVariantId): echo 'checked'; endif; ?> <?php if(! $isAvailable): echo 'disabled'; endif; ?> required>
                                     <div class="flex items-start justify-between gap-4">
                                         <div class="min-w-0">
@@ -195,6 +195,32 @@
     </div>
 </section>
 <?php endif; ?>
+
+<style>
+    [data-variant-option].is-selected {
+        border-color: rgb(13 148 136);
+        background: rgb(240 253 250);
+        box-shadow: 0 10px 24px rgba(15, 118, 110, .12);
+    }
+    .dark [data-variant-option].is-selected {
+        border-color: rgb(45 212 191);
+        background: rgba(45, 212, 191, .10);
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const variantInputs = document.querySelectorAll('input[name="variant_id"]');
+        const syncVariantActive = () => {
+            document.querySelectorAll('[data-variant-option]').forEach((option) => {
+                const input = option.querySelector('input[name="variant_id"]');
+                option.classList.toggle('is-selected', !!input?.checked);
+            });
+        };
+        variantInputs.forEach((input) => input.addEventListener('change', syncVariantActive));
+        syncVariantActive();
+    });
+</script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/faizal/Projects/laravel/digitalkit/resources/views/products/show.blade.php ENDPATH**/ ?>

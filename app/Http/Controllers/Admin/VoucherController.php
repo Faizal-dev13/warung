@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Voucher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class VoucherController extends Controller
         }
 
         $vouchers = Voucher::query()
+            ->with('products')
             ->when($request->filled('q'), function ($query) use ($request) {
                 $keyword = '%'.trim((string) $request->query('q')).'%';
                 $query->where(function ($subQuery) use ($keyword) {
@@ -63,24 +65,36 @@ class VoucherController extends Controller
 
     public function create(): View
     {
-        return view('admin.vouchers.form', ['voucher' => new Voucher()]);
+        return view('admin.vouchers.form', [
+            'voucher' => new Voucher(),
+            'products' => Product::where('is_active', true)->orderBy('name')->get(),
+            'selectedProducts' => [],
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        Voucher::create($this->payload($request));
+        $voucher = Voucher::create($this->payload($request));
+        $voucher->products()->sync($this->productIds($request));
 
         return redirect()->route('admin.vouchers.index')->with('success', 'Voucher berhasil ditambahkan.');
     }
 
     public function edit(Voucher $voucher): View
     {
-        return view('admin.vouchers.form', compact('voucher'));
+        $voucher->load('products');
+
+        return view('admin.vouchers.form', [
+            'voucher' => $voucher,
+            'products' => Product::orderBy('name')->get(),
+            'selectedProducts' => $voucher->products->pluck('id')->map(fn ($id) => (string) $id)->all(),
+        ]);
     }
 
     public function update(Request $request, Voucher $voucher): RedirectResponse
     {
         $voucher->update($this->payload($request, $voucher));
+        $voucher->products()->sync($this->productIds($request));
 
         return redirect()->route('admin.vouchers.index')->with('success', 'Voucher berhasil diperbarui.');
     }
@@ -102,6 +116,8 @@ class VoucherController extends Controller
             'minimum_order' => ['nullable', 'integer', 'min:0'],
             'starts_at' => ['nullable', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
+            'product_ids' => ['nullable', 'array'],
+            'product_ids.*' => ['integer', 'exists:products,id'],
         ]);
 
         return [
@@ -114,6 +130,16 @@ class VoucherController extends Controller
             'ends_at' => $data['ends_at'] ?? null,
             'is_active' => $request->boolean('is_active'),
         ];
+    }
+
+    private function productIds(Request $request): array
+    {
+        return collect($request->input('product_ids', []))
+            ->filter(fn ($id) => filled($id))
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
     }
 
     private function perPage(Request $request): int
