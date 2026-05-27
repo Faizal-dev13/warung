@@ -280,7 +280,7 @@
             </div>
         </div>
 
-        <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 lg:gap-5">
+        <div class="hidden gap-3 md:grid md:grid-cols-3 lg:grid-cols-1 lg:gap-5">
             <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-white/5 sm:block sm:rounded-[2rem] sm:p-6">
                 <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-400/10 dark:text-emerald-300 dark:ring-emerald-400/20">
                     <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
@@ -351,7 +351,7 @@
         </div>
     </form>
 
-    <div class="mb-6 grid gap-3 rounded-[1.5rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-emerald-50 p-3 shadow-sm dark:border-teal-400/15 dark:from-teal-500/10 dark:via-white/5 dark:to-emerald-500/10 sm:mb-8 sm:grid-cols-[1fr_auto] sm:items-center sm:p-4">
+    <div class="mb-6 hidden gap-3 rounded-[1.5rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-emerald-50 p-3 shadow-sm dark:border-teal-400/15 dark:from-teal-500/10 dark:via-white/5 dark:to-emerald-500/10 sm:mb-8 sm:p-4 md:grid md:grid-cols-[1fr_auto] md:items-center">
         <div class="flex items-start gap-3">
             <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-700 text-white shadow-lg shadow-teal-700/20">
                 <i class="ph ph-shopping-cart-simple text-xl"></i>
@@ -416,6 +416,55 @@
     </div>
 </section>
 
+<section id="mobile-info" class="mx-auto max-w-7xl px-4 pb-24 pt-3 md:hidden">
+    <div class="grid gap-3">
+        <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-white/5">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-400/10 dark:text-emerald-300 dark:ring-emerald-400/20">
+                <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
+            </div>
+            <div class="min-w-0">
+                <h3 class="text-sm font-extrabold leading-tight text-slate-950 dark:text-white">Pesan Lebih Cepat</h3>
+                <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">Pilih produk, masuk keranjang, lalu konfirmasi pesanan tanpa proses yang membingungkan.</p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-white/5">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 ring-1 ring-blue-100 dark:bg-blue-400/10 dark:text-blue-300 dark:ring-blue-400/20">
+                <i class="ph ph-squares-four text-2xl"></i>
+            </div>
+            <div class="min-w-0">
+                <h3 class="text-sm font-extrabold leading-tight text-slate-950 dark:text-white">Katalog Rapi</h3>
+                <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">Produk, kategori, dan promo tersusun jelas agar mudah dibandingkan.</p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-white/5">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-50 text-violet-600 ring-1 ring-violet-100 dark:bg-violet-400/10 dark:text-violet-300 dark:ring-violet-400/20">
+                <i class="ph ph-sparkle text-2xl"></i>
+            </div>
+            <div class="min-w-0">
+                <h3 class="text-sm font-extrabold leading-tight text-slate-950 dark:text-white">Nyaman Dilihat</h3>
+                <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">Tampilan ringan dan responsif, tetap rapi saat dibuka dari HP maupun desktop.</p>
+            </div>
+        </div>
+
+        <div class="mt-1 grid gap-3 rounded-[1.5rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-emerald-50 p-3 shadow-sm dark:border-teal-400/15 dark:from-teal-500/10 dark:via-white/5 dark:to-emerald-500/10">
+            <div class="flex items-start gap-3">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-700 text-white shadow-lg shadow-teal-700/20">
+                    <i class="ph ph-shopping-cart-simple text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-950 dark:text-white">Checkout lebih praktis</h3>
+                    <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">Tambahkan beberapa produk ke keranjang, cek ringkasannya, lalu lanjut konfirmasi pesanan via WhatsApp.</p>
+                </div>
+            </div>
+            <button data-cart-toggle type="button" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">
+                Buka Checkout <i class="ph ph-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
 
 <nav class="mobile-bottom-menu fixed inset-x-0 bottom-0 z-50 px-3 md:hidden">
     <div class="mx-auto grid max-w-md grid-cols-4 gap-1 rounded-[1.45rem] border border-slate-200/80 bg-white/95 p-2 shadow-[0_-12px_35px_rgba(15,23,42,.12)] backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950 dark:shadow-[0_-16px_40px_rgba(0,0,0,.35)]">
@@ -431,11 +480,10 @@
             <i class="ph ph-ticket text-lg"></i>
             Promo
         </a>
-        <button data-cart-toggle type="button" class="mobile-bottom-action">
-            <span data-cart-count-badge class="absolute right-2 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-rose-500 px-1 text-[9px] font-extrabold text-white {{ ($cart['count'] ?? 0) > 0 ? '' : 'hidden' }}">{{ $cart['count'] ?? 0 }}</span>
-            <i class="ph ph-shopping-cart-simple text-lg"></i>
-            Checkout
-        </button>
+        <a href="{{ route('qna') }}" class="mobile-bottom-action">
+            <i class="ph ph-question text-lg"></i>
+            QnA
+        </a>
     </div>
 </nav>
 

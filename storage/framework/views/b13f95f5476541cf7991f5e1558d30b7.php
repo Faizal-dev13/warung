@@ -32,24 +32,29 @@
             <?php else: ?>
                 <div class="absolute inset-0 overflow-hidden bg-gradient-to-br <?php echo e($product->accent ?: 'from-slate-200 to-slate-300'); ?> p-4 text-white">
                     <div class="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/20 blur-2xl"></div>
-                    <div class="relative flex h-full flex-col justify-between">
-                        <span class="w-fit rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-extrabold backdrop-blur"><?php echo e($product->badge ?? 'Produk'); ?></span>
+                    <div class="relative flex h-full items-center justify-center">
                         <i class="ph <?php echo e($product->icon ?: 'ph-package'); ?> text-5xl drop-shadow"></i>
                     </div>
                 </div>
             <?php endif; ?>
 
-            <?php if($product->badge): ?>
-                <span class="absolute left-2.5 top-2.5 max-w-[calc(100%-1.25rem)] truncate rounded-full bg-white/92 px-2.5 py-1 text-[10px] font-extrabold text-slate-800 shadow-sm ring-1 ring-white/60 backdrop-blur dark:bg-slate-950/80 dark:text-white dark:ring-white/10 sm:left-3 sm:top-3 sm:text-[11px]">
-                    <?php echo e($product->badge); ?>
-
-                </span>
-            <?php endif; ?>
-
-            <?php if($hasVariants): ?>
-                <span class="absolute bottom-2.5 left-2.5 rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-extrabold text-white shadow-sm backdrop-blur sm:bottom-3 sm:left-3"><?php echo e($activeVariants->count()); ?> varian</span>
-            <?php endif; ?>
         </div>
+
+        <?php if($product->badge || $hasVariants): ?>
+            <div class="store-product-badges mt-2 flex min-w-0 flex-wrap gap-1.5">
+                <?php if($product->badge): ?>
+                    <span class="max-w-full truncate rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-extrabold text-slate-700 ring-1 ring-slate-200 dark:bg-white/10 dark:text-slate-200 dark:ring-white/10 sm:text-[11px]">
+                        <?php echo e($product->badge); ?>
+
+                    </span>
+                <?php endif; ?>
+                <?php if($hasVariants): ?>
+                    <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-extrabold text-emerald-700 ring-1 ring-emerald-100 dark:bg-emerald-400/10 dark:text-emerald-300 dark:ring-emerald-400/20 sm:text-[11px]">
+                        <?php echo e($activeVariants->count()); ?> varian
+                    </span>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     </a>
 
     <div class="store-product-body flex min-w-0 flex-1 flex-col p-3 sm:p-4">

@@ -132,8 +132,8 @@
                                 @php
                                     $isAvailable = is_null($variant->stock) || (int) $variant->stock > 0;
                                 @endphp
-                                <label data-variant-option class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-4 transition has-[:checked]:border-teal-600 has-[:checked]:bg-teal-50 has-[:checked]:shadow-md dark:border-white/10 dark:bg-white/5 dark:has-[:checked]:border-teal-400 dark:has-[:checked]:bg-teal-400/10 sm:p-5 {{ $isAvailable ? 'cursor-pointer hover:border-teal-300 hover:bg-teal-50/70 dark:hover:border-teal-400/50 dark:hover:bg-teal-400/10' : 'cursor-not-allowed opacity-55' }}">
-                                    <input type="radio" name="variant_id" value="{{ $variant->id }}" class="peer sr-only" @checked($variant->id === $defaultVariantId) @disabled(! $isAvailable) required>
+                                <label data-variant-option class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-4 transition dark:border-white/10 dark:bg-white/5 sm:p-5 {{ (int) $variant->id === (int) $defaultVariantId ? 'is-selected' : '' }} {{ $isAvailable ? 'cursor-pointer hover:border-teal-300 hover:bg-teal-50/70 dark:hover:border-teal-400/50 dark:hover:bg-teal-400/10' : 'cursor-not-allowed opacity-55' }}">
+                                    <input type="radio" name="variant_id" value="{{ $variant->id }}" class="peer sr-only" @checked((int) $variant->id === (int) $defaultVariantId) @disabled(! $isAvailable) required>
                                     <div class="flex items-start justify-between gap-4">
                                         <div class="min-w-0">
                                             <div class="flex items-center gap-2">
@@ -157,6 +157,9 @@
                                                 <p class="text-xs font-semibold text-slate-400 line-through">{{ Money::rupiah($variant->old_price) }}</p>
                                             @endif
                                             <p class="text-base font-extrabold text-teal-700 dark:text-teal-300 sm:text-lg">{{ Money::rupiah($variant->price) }}</p>
+                                            <span class="variant-selected-text mt-1 hidden items-center justify-end gap-1 text-[10px] font-extrabold uppercase tracking-wide text-teal-700 dark:text-teal-300">
+                                                <i class="ph ph-check-circle"></i> Dipilih
+                                            </span>
                                         </div>
                                     </div>
                                 </label>
@@ -197,25 +200,41 @@
 
 <style>
     [data-variant-option].is-selected {
-        border-color: rgb(13 148 136);
-        background: rgb(240 253 250);
-        box-shadow: 0 10px 24px rgba(15, 118, 110, .12);
+        border-color: rgb(13 148 136) !important;
+        background: rgb(240 253 250) !important;
+        box-shadow: 0 10px 24px rgba(15, 118, 110, .12) !important;
+    }
+    [data-variant-option].is-selected .variant-selected-text {
+        display: inline-flex;
     }
     .dark [data-variant-option].is-selected {
-        border-color: rgb(45 212 191);
-        background: rgba(45, 212, 191, .10);
+        border-color: rgb(45 212 191) !important;
+        background: rgba(45, 212, 191, .10) !important;
     }
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const variantInputs = document.querySelectorAll('input[name="variant_id"]');
+        const variantOptions = Array.from(document.querySelectorAll('[data-variant-option]'));
+
         const syncVariantActive = () => {
-            document.querySelectorAll('[data-variant-option]').forEach((option) => {
+            variantOptions.forEach((option) => {
                 const input = option.querySelector('input[name="variant_id"]');
-                option.classList.toggle('is-selected', !!input?.checked);
+                option.classList.toggle('is-selected', Boolean(input && input.checked));
             });
         };
-        variantInputs.forEach((input) => input.addEventListener('change', syncVariantActive));
+
+        variantOptions.forEach((option) => {
+            const input = option.querySelector('input[name="variant_id"]');
+            if (!input) return;
+
+            input.addEventListener('change', syncVariantActive);
+            option.addEventListener('click', () => {
+                if (!input.disabled) {
+                    window.requestAnimationFrame(syncVariantActive);
+                }
+            });
+        });
+
         syncVariantActive();
     });
 </script>
