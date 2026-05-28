@@ -3,7 +3,7 @@
     $isHomeBottom = $bottomActive === 'home';
 ?>
 
-<?php if (! $__env->hasRenderedOnce('50755cd5-a6ec-4256-83ac-2555109f4a7a')): $__env->markAsRenderedOnce('50755cd5-a6ec-4256-83ac-2555109f4a7a'); ?>
+<?php if (! $__env->hasRenderedOnce('107e4ce5-1e8a-4a97-84c5-13715dfc789a')): $__env->markAsRenderedOnce('107e4ce5-1e8a-4a97-84c5-13715dfc789a'); ?>
     <style>
         .mobile-bottom-link,
         .mobile-bottom-action {
@@ -92,7 +92,7 @@
 </nav>
 
 <?php if($isHomeBottom): ?>
-    <?php if (! $__env->hasRenderedOnce('a33626c3-11fd-4edf-92a2-e8880aac0df9')): $__env->markAsRenderedOnce('a33626c3-11fd-4edf-92a2-e8880aac0df9'); ?>
+    <?php if (! $__env->hasRenderedOnce('3dc12724-b1a3-4f53-b69b-7ee8229e9540')): $__env->markAsRenderedOnce('3dc12724-b1a3-4f53-b69b-7ee8229e9540'); ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const menuLinks = Array.from(document.querySelectorAll('[data-bottom-target]'));

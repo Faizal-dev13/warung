@@ -1,6 +1,6 @@
 <?php $__env->startSection('title', config('store.name').' - Belanja Mudah via WhatsApp'); ?>
 <?php $__env->startSection('content'); ?>
-<?php if (! $__env->hasRenderedOnce('94c09435-de17-4d29-bfbd-f644628383e9')): $__env->markAsRenderedOnce('94c09435-de17-4d29-bfbd-f644628383e9'); ?>
+<?php if (! $__env->hasRenderedOnce('6d69894f-6b28-45f3-b2b7-6a6452b2f512')): $__env->markAsRenderedOnce('6d69894f-6b28-45f3-b2b7-6a6452b2f512'); ?>
     <style>
         html {
             scroll-behavior: smooth;
@@ -315,13 +315,13 @@
     </div>
 </section>
 
-<section id="produk" class="mx-auto max-w-7xl px-4 py-7 pb-24 sm:px-6 sm:py-10 md:pb-12 lg:px-8">
-    <div class="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-end md:justify-between">
-        <div>
+<section id="produk" class="mx-auto max-w-7xl px-4 pt-7 pb-8 sm:px-6 sm:pt-10 sm:pb-8 md:pb-8 lg:px-8">
+    <div class="relative mb-6 text-center md:mb-8">
+        <div class="mx-auto max-w-2xl">
             <p class="text-sm font-extrabold uppercase tracking-wide text-teal-700 dark:text-teal-300">Katalog Produk</p>
             <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Pilih produk yang paling sesuai</h2>
         </div>
-        <a href="<?php echo e(route('products.index')); ?>" class="hidden items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950 md:inline-flex">
+        <a href="<?php echo e(route('products.index')); ?>" class="hidden items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950 md:absolute md:right-0 md:top-1/2 md:inline-flex md:-translate-y-1/2">
             Lihat Selengkapnya <i class="ph ph-arrow-right"></i>
         </a>
     </div>
@@ -362,7 +362,7 @@
     </div>
 </section>
 
-<section id="voucher" class="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
+<section id="voucher" class="mx-auto max-w-7xl px-4 pt-2 pb-7 sm:px-6 sm:pt-3 sm:pb-10 lg:px-8">
     <div class="relative overflow-hidden rounded-[1.75rem] bg-slate-950 p-5 text-white shadow-soft sm:rounded-[2rem] sm:p-8">
         <div class="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-emerald-400/20 blur-2xl"></div>
         <div class="pointer-events-none absolute -bottom-14 -left-14 h-48 w-48 rounded-full bg-teal-400/20 blur-2xl"></div>
