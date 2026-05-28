@@ -1,6 +1,6 @@
 <?php $__env->startSection('title', config('store.name').' - Belanja Mudah via WhatsApp'); ?>
 <?php $__env->startSection('content'); ?>
-<?php if (! $__env->hasRenderedOnce('6d69894f-6b28-45f3-b2b7-6a6452b2f512')): $__env->markAsRenderedOnce('6d69894f-6b28-45f3-b2b7-6a6452b2f512'); ?>
+<?php if (! $__env->hasRenderedOnce('6cc9047e-f7c8-40f5-aecf-8803cdee872e')): $__env->markAsRenderedOnce('6cc9047e-f7c8-40f5-aecf-8803cdee872e'); ?>
     <style>
         html {
             scroll-behavior: smooth;

@@ -1,7 +1,6 @@
-@extends('layouts.app')
-@section('title', 'Produk - '.($settings['store_name'] ?? config('store.name')))
-@section('content')
-@once
+<?php $__env->startSection('title', 'Produk - '.($settings['store_name'] ?? config('store.name'))); ?>
+<?php $__env->startSection('content'); ?>
+<?php if (! $__env->hasRenderedOnce('325e83cb-1e4f-421e-ade6-7338ddf79925')): $__env->markAsRenderedOnce('325e83cb-1e4f-421e-ade6-7338ddf79925'); ?>
     <style>
         html { scroll-behavior: smooth; }
         #produk { scroll-margin-top: 5.5rem; }
@@ -83,7 +82,7 @@
             .home-product-card .store-product-detail-button i { font-size: .92rem !important; }
         }
     </style>
-@endonce
+<?php endif; ?>
 
 <section id="produk" class="mx-auto max-w-7xl px-4 py-7 pb-24 sm:px-6 sm:py-10 md:pb-12 lg:px-8">
     <div class="mb-6 flex flex-col items-center gap-4 text-center md:mb-8">
@@ -97,25 +96,25 @@
         </button>
     </div>
 
-    <form method="get" action="{{ route('products.index') }}" class="mb-6 rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/5 sm:mb-8 sm:rounded-[2rem] sm:p-4">
+    <form method="get" action="<?php echo e(route('products.index')); ?>" class="mb-6 rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/5 sm:mb-8 sm:rounded-[2rem] sm:p-4">
         <div class="grid gap-3 md:grid-cols-[1fr_.65fr_.55fr_auto]">
             <label class="relative block">
                 <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input name="q" value="{{ $filters['query'] }}" placeholder="Cari produk..." class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-medium outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
+                <input name="q" value="<?php echo e($filters['query']); ?>" placeholder="Cari produk..." class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-medium outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
             </label>
 
             <select name="category" class="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium outline-none transition focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
-                <option value="all" @selected($filters['category'] === 'all')>Semua Kategori</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->slug }}" @selected($filters['category'] === $category->slug)>{{ $category->name }}</option>
-                @endforeach
+                <option value="all" <?php if($filters['category'] === 'all'): echo 'selected'; endif; ?>>Semua Kategori</option>
+                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($category->slug); ?>" <?php if($filters['category'] === $category->slug): echo 'selected'; endif; ?>><?php echo e($category->name); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
 
             <select name="sort" class="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium outline-none transition focus:border-slate-950 focus:bg-white dark:border-white/10 dark:bg-white/10 dark:focus:border-white/40">
-                <option value="popular" @selected($filters['sort'] === 'popular')>Paling Populer</option>
-                <option value="highest" @selected($filters['sort'] === 'highest')>Harga Tertinggi</option>
-                <option value="lowest" @selected($filters['sort'] === 'lowest')>Harga Terendah</option>
-                <option value="discount" @selected($filters['sort'] === 'discount')>Promo Terbaik</option>
+                <option value="popular" <?php if($filters['sort'] === 'popular'): echo 'selected'; endif; ?>>Paling Populer</option>
+                <option value="highest" <?php if($filters['sort'] === 'highest'): echo 'selected'; endif; ?>>Harga Tertinggi</option>
+                <option value="lowest" <?php if($filters['sort'] === 'lowest'): echo 'selected'; endif; ?>>Harga Terendah</option>
+                <option value="discount" <?php if($filters['sort'] === 'discount'): echo 'selected'; endif; ?>>Promo Terbaik</option>
             </select>
 
             <button class="h-12 rounded-2xl bg-slate-950 px-6 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">Terapkan</button>
@@ -124,50 +123,52 @@
 
     <div class="mb-5 flex items-center justify-between gap-3 text-sm text-slate-500 dark:text-slate-400">
         <p>
-            @if($products->total() > 0)
-                Menampilkan {{ $products->firstItem() }}-{{ $products->lastItem() }} dari {{ $products->total() }} produk
-            @else
+            <?php if($products->total() > 0): ?>
+                Menampilkan <?php echo e($products->firstItem()); ?>-<?php echo e($products->lastItem()); ?> dari <?php echo e($products->total()); ?> produk
+            <?php else: ?>
                 Belum ada produk yang sesuai
-            @endif
+            <?php endif; ?>
         </p>
-        @if($filters['query'] !== '' || $filters['category'] !== 'all' || $filters['sort'] !== 'popular')
-            <a href="{{ route('products.index') }}" class="font-extrabold text-teal-700 hover:text-teal-800 dark:text-teal-300">Reset</a>
-        @endif
+        <?php if($filters['query'] !== '' || $filters['category'] !== 'all' || $filters['sort'] !== 'popular'): ?>
+            <a href="<?php echo e(route('products.index')); ?>" class="font-extrabold text-teal-700 hover:text-teal-800 dark:text-teal-300">Reset</a>
+        <?php endif; ?>
     </div>
 
     <div class="home-product-grid grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
-        @forelse($products as $product)
+        <?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <div class="home-product-card min-w-0">
-                @include('products.card', ['product' => $product])
+                <?php echo $__env->make('products.card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             </div>
-        @empty
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="col-span-full rounded-[1.5rem] border border-dashed border-slate-300 bg-white/60 p-8 text-center dark:border-white/15 dark:bg-white/5 sm:rounded-[2rem] sm:p-10">
                 <i class="ph ph-magnifying-glass text-5xl text-slate-400"></i>
                 <h3 class="mt-4 text-lg font-extrabold text-slate-950 dark:text-white sm:text-xl">Produk tidak ditemukan</h3>
                 <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 sm:text-base">Coba gunakan kata kunci lain atau pilih kategori yang berbeda.</p>
             </div>
-        @endforelse
+        <?php endif; ?>
     </div>
 
-    @if($products->hasPages())
+    <?php if($products->hasPages()): ?>
         <div class="mt-8 flex flex-col gap-3 rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/5 sm:flex-row sm:items-center sm:justify-between sm:rounded-[2rem] sm:p-4">
-            <p class="px-2 text-xs font-semibold text-slate-500 dark:text-slate-400 sm:text-sm">Halaman {{ $products->currentPage() }} dari {{ $products->lastPage() }}</p>
+            <p class="px-2 text-xs font-semibold text-slate-500 dark:text-slate-400 sm:text-sm">Halaman <?php echo e($products->currentPage()); ?> dari <?php echo e($products->lastPage()); ?></p>
             <div class="grid grid-cols-2 gap-2 sm:flex sm:items-center">
-                @if($products->onFirstPage())
+                <?php if($products->onFirstPage()): ?>
                     <span class="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 px-4 text-sm font-extrabold text-slate-300 dark:border-white/10 dark:text-slate-600">Sebelumnya</span>
-                @else
-                    <a href="{{ $products->previousPageUrl() }}" class="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 text-sm font-extrabold text-slate-700 transition hover:bg-slate-50 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15">Sebelumnya</a>
-                @endif
+                <?php else: ?>
+                    <a href="<?php echo e($products->previousPageUrl()); ?>" class="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 text-sm font-extrabold text-slate-700 transition hover:bg-slate-50 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15">Sebelumnya</a>
+                <?php endif; ?>
 
-                @if($products->hasMorePages())
-                    <a href="{{ $products->nextPageUrl() }}" class="inline-flex h-11 items-center justify-center rounded-2xl bg-slate-950 px-4 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">Berikutnya</a>
-                @else
+                <?php if($products->hasMorePages()): ?>
+                    <a href="<?php echo e($products->nextPageUrl()); ?>" class="inline-flex h-11 items-center justify-center rounded-2xl bg-slate-950 px-4 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950">Berikutnya</a>
+                <?php else: ?>
                     <span class="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 px-4 text-sm font-extrabold text-slate-300 dark:border-white/10 dark:text-slate-600">Berikutnya</span>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
-    @endif
+    <?php endif; ?>
 </section>
 
-@include('partials.mobile-bottom-menu', ['bottomActive' => 'products'])
-@endsection
+<?php echo $__env->make('partials.mobile-bottom-menu', ['bottomActive' => 'products'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/faizal/Projects/laravel/digitalkit/resources/views/pages/products.blade.php ENDPATH**/ ?>
