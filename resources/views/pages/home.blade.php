@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', config('store.name').' - Belanja Mudah via WhatsApp')
+@section('title', config('store.name').' - Belanja Produk Digital')
 @section('content')
 @once
     <style>
@@ -40,6 +40,14 @@
             object-fit: cover !important;
             opacity: 1 !important;
             visibility: visible !important;
+        }
+
+        .home-banner-title {
+            text-wrap: balance;
+        }
+
+        .home-banner-subtitle {
+            text-wrap: pretty;
         }
 
         .mobile-bottom-link,
@@ -115,6 +123,56 @@
         }
 
         @media (max-width: 639px) {
+            .home-banner-slide {
+                aspect-ratio: 4 / 3;
+                min-height: 20.5rem;
+                padding: 1.45rem 1.2rem 2.15rem !important;
+            }
+
+            .home-banner-content {
+                justify-content: center;
+                gap: 1rem !important;
+            }
+
+            .home-banner-copy {
+                max-width: 18.5rem;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: .15rem;
+                padding-right: .15rem;
+            }
+
+            .home-banner-label {
+                max-width: 100%;
+                justify-content: center;
+                padding: .55rem .85rem !important;
+                font-size: .66rem !important;
+                line-height: 1.05rem !important;
+            }
+
+            .home-banner-title {
+                margin-top: .95rem !important;
+                font-size: clamp(1.55rem, 7vw, 2.05rem) !important;
+                line-height: 1.14 !important;
+                letter-spacing: -.035em;
+            }
+
+            .home-banner-subtitle {
+                display: -webkit-box;
+                max-width: 17.5rem;
+                margin-top: .78rem !important;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+                font-size: .82rem !important;
+                line-height: 1.5rem !important;
+            }
+
+            [data-banner-slider] [data-banner-dot] {
+                width: .55rem;
+                height: .55rem;
+            }
+
             .home-product-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: .72rem;
@@ -226,28 +284,28 @@
                             ? (\Illuminate\Support\Str::startsWith($bannerMobileImagePath, ['http://', 'https://', '/']) ? $bannerMobileImagePath : \Illuminate\Support\Facades\Storage::url($bannerMobileImagePath))
                             : null;
                     @endphp
-                    <article data-banner-slide class="{{ $loop->first ? '' : 'hidden' }} relative aspect-[4/3] min-h-0 overflow-hidden {{ $bannerImageUrl ? 'bg-slate-950' : 'bg-gradient-to-br '.($banner->accent ?: 'from-slate-950 to-blue-950') }} p-6 text-white sm:aspect-[8/3] sm:p-10">
+                    <article data-banner-slide class="{{ $loop->first ? '' : 'hidden' }} home-banner-slide relative aspect-[4/3] min-h-0 overflow-hidden {{ $bannerImageUrl ? 'bg-slate-950' : 'bg-gradient-to-br '.($banner->accent ?: 'from-slate-950 to-blue-950') }} px-5 py-7 text-white sm:aspect-[8/3] sm:p-10">
                         @if($bannerImageUrl)
                             <picture class="absolute inset-0 block h-full w-full">
                                 @if($bannerMobileImageUrl)
                                     <source media="(max-width: 639px)" srcset="{{ $bannerMobileImageUrl }}">
                                 @endif
-                                <img src="{{ $bannerImageUrl }}" alt="{{ $banner->title }}" class="absolute inset-0 block h-full w-full object-cover">
+                                <img src="{{ $bannerImageUrl }}" alt="{{ $banner->title }}" width="1200" height="450" loading="{{ $loop->first ? 'eager' : 'lazy' }}" decoding="async" @if($loop->first) fetchpriority="high" @endif class="absolute inset-0 block h-full w-full object-cover">
                             </picture>
                             <div class="absolute inset-0 bg-gradient-to-br from-slate-950/82 via-slate-950/55 to-slate-950/20"></div>
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent"></div>
                         @endif
 
-                        <div class="relative z-10 flex h-full flex-col justify-center gap-8">
-                            <div>
+                        <div class="home-banner-content relative z-10 flex h-full flex-col items-center justify-center gap-5 text-center sm:items-start sm:gap-8 sm:text-left">
+                            <div class="home-banner-copy w-full">
                                 @if($banner->label)
-                                    <span class="inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 ring-1 ring-white/15 backdrop-blur sm:px-4 sm:text-xs">{{ $banner->label }}</span>
+                                    <span class="home-banner-label inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 ring-1 ring-white/15 backdrop-blur sm:px-4 sm:text-xs">{{ $banner->label }}</span>
                                 @endif
 
-                                <h1 class="mt-5 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight drop-shadow-sm sm:mt-6 sm:text-5xl">{{ $banner->title }}</h1>
+                                <h1 class="home-banner-title mx-auto mt-5 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight drop-shadow-sm sm:mx-0 sm:mt-6 sm:text-5xl">{{ $banner->title }}</h1>
 
                                 @if($banner->subtitle)
-                                    <p class="mt-4 max-w-xl text-sm leading-7 text-white/78 drop-shadow-sm sm:text-base">{{ $banner->subtitle }}</p>
+                                    <p class="home-banner-subtitle mx-auto mt-4 max-w-xl text-sm leading-7 text-white/78 drop-shadow-sm sm:mx-0 sm:text-base">{{ $banner->subtitle }}</p>
                                 @endif
                             </div>
 
@@ -259,11 +317,13 @@
                         @endunless
                     </article>
                 @empty
-                    <article class="relative aspect-[4/3] min-h-0 overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-6 text-white sm:aspect-[8/3] sm:p-10">
-                        <div class="relative z-10 max-w-2xl">
-                            <span class="inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 backdrop-blur">Belanja Praktis</span>
-                            <h1 class="mt-5 text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">Temukan produk pilihan dan pesan lebih mudah.</h1>
-                            <p class="mt-4 max-w-xl text-sm leading-7 text-white/75 sm:text-base">Pilih produk favorit, masukkan ke keranjang, lalu lanjutkan konfirmasi pesanan melalui WhatsApp.</p>
+                    <article class="home-banner-slide relative aspect-[4/3] min-h-0 overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 px-5 py-7 text-white sm:aspect-[8/3] sm:p-10">
+                        <div class="home-banner-content relative z-10 flex h-full flex-col items-center justify-center text-center sm:items-start sm:text-left">
+                            <div class="home-banner-copy mx-auto max-w-2xl sm:mx-0">
+                                <span class="home-banner-label inline-flex rounded-full bg-white/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-wide text-white/90 backdrop-blur">Belanja Praktis</span>
+                                <h1 class="home-banner-title mt-5 text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">Temukan produk pilihan dan pesan lebih mudah.</h1>
+                                <p class="home-banner-subtitle mx-auto mt-4 max-w-xl text-sm leading-7 text-white/75 sm:mx-0 sm:text-base">Pilih produk favorit, masukkan ke keranjang, lalu lanjutkan konfirmasi pesanan melalui WhatsApp.</p>
+                            </div>
                         </div>
                         <div class="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-white/10 blur-2xl sm:h-72 sm:w-72"></div>
                         <i class="ph ph-shopping-bag-open pointer-events-none absolute bottom-6 right-6 text-7xl text-white/15 sm:bottom-8 sm:right-8 sm:text-9xl"></i>
@@ -271,7 +331,7 @@
                 @endforelse
 
                 @if($banners->count() > 1)
-                    <div class="absolute bottom-5 left-6 z-20 flex gap-2 sm:left-7">
+                    <div class="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-5 sm:left-7 sm:translate-x-0">
                         @foreach($banners as $banner)
                             <button data-banner-dot type="button" class="h-2.5 w-2.5 rounded-full bg-white/40 transition first:bg-white" aria-label="Banner {{ $loop->iteration }}"></button>
                         @endforeach
@@ -319,8 +379,9 @@
 <section id="produk" class="mx-auto max-w-7xl px-4 pt-7 pb-8 sm:px-6 sm:pt-10 sm:pb-8 md:pb-8 lg:px-8">
     <div class="relative mb-6 text-center md:mb-8">
         <div class="mx-auto max-w-2xl">
-            <p class="text-sm font-extrabold uppercase tracking-wide text-teal-700 dark:text-teal-300">Katalog Produk</p>
-            <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Pilih produk yang paling sesuai</h2>
+            <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-teal-700 dark:text-teal-300 sm:text-4xl">Katalog Produk</h2>
+            <p class="text-sm font-extrabold uppercase tracking-wide text-slate-950 dark:text-white ">Pilih produk yang paling sesuai</p>
+            
         </div>
         <a href="{{ route('products.index') }}" class="hidden items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:bg-white dark:text-slate-950 md:absolute md:right-0 md:top-1/2 md:inline-flex md:-translate-y-1/2">
             Lihat Selengkapnya <i class="ph ph-arrow-right"></i>
@@ -362,6 +423,28 @@
         </a>
     </div>
 </section>
+
+
+<section class="hidden md:block mx-auto max-w-7xl px-4 pt-1 pb-5 sm:px-6 lg:px-8">
+    <div class="grid gap-4 rounded-[1.55rem] border border-amber-100 bg-gradient-to-br from-white via-amber-50/80 to-orange-50 p-4 shadow-sm dark:border-amber-400/15 dark:from-white/10 dark:via-amber-500/10 dark:to-orange-500/10 lg:grid-cols-[1fr_auto] lg:items-center lg:p-5">
+        <div class="flex items-start gap-3.5">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20">
+                <i class="ph ph-chat-circle-dots text-xl"></i>
+            </div>
+            <div class="min-w-0">
+                <h3 class="text-base font-extrabold tracking-tight text-slate-950 dark:text-white">Punya pengalaman belanja?</h3>
+                <p class="mt-1 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                    Ceritakan pengalamanmu secara singkat. Masukan dari kamu membantu customer lain lebih yakin sebelum memilih produk.
+                </p>
+            </div>
+        </div>
+        <a href="{{ route('testimonials.index') }}#form-testimoni" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-sm font-extrabold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 dark:bg-white dark:text-slate-950 lg:min-w-[11rem]">
+            <i class="ph ph-pencil-simple-line text-lg"></i>
+            Tulis Testimoni
+        </a>
+    </div>
+</section>
+
 
 <section id="voucher" class="mx-auto max-w-7xl px-4 pt-2 pb-7 sm:px-6 sm:pt-3 sm:pb-10 lg:px-8">
     <div class="relative overflow-hidden rounded-[1.75rem] bg-slate-950 p-5 text-white shadow-soft sm:rounded-[2rem] sm:p-8">
@@ -428,6 +511,23 @@
                 <h3 class="text-sm font-extrabold leading-tight text-slate-950 dark:text-white">Nyaman Dilihat</h3>
                 <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">Tampilan ringan dan responsif, tetap rapi saat dibuka dari HP maupun desktop.</p>
             </div>
+        </div>
+
+
+        <div class="mt-1 grid gap-3 rounded-[1.35rem] border border-amber-100 bg-gradient-to-br from-white via-amber-50/80 to-orange-50 p-3.5 shadow-sm dark:border-amber-400/15 dark:from-white/10 dark:via-amber-500/10 dark:to-orange-500/10">
+            <div class="flex items-start gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20">
+                    <i class="ph ph-chat-circle-dots text-xl"></i>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="text-sm font-extrabold leading-tight text-slate-950 dark:text-white">Punya pengalaman belanja?</h3>
+                    <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">Bagikan cerita singkatmu supaya customer lain lebih yakin sebelum belanja.</p>
+                </div>
+            </div>
+            <a href="{{ route('testimonials.index') }}#form-testimoni" class="inline-flex h-10 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 text-xs font-extrabold text-white shadow-sm transition active:scale-[0.99] dark:bg-white dark:text-slate-950">
+                <i class="ph ph-pencil-simple-line text-base"></i>
+                Tulis Testimoni
+            </a>
         </div>
 
         <div class="mt-1 grid gap-3 rounded-[1.5rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-emerald-50 p-3 shadow-sm dark:border-teal-400/15 dark:from-teal-500/10 dark:via-white/5 dark:to-emerald-500/10">

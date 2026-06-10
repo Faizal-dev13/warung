@@ -53,7 +53,7 @@
             <div class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-soft dark:border-white/10 dark:bg-white/5 sm:rounded-[2rem]">
                 <div class="relative overflow-hidden bg-slate-100 dark:bg-white/10">
                     @if($productImageUrl)
-                        <img src="{{ $productImageUrl }}" alt="{{ $product->name }}" class="aspect-[4/3] w-full object-cover sm:aspect-square lg:aspect-[4/4.2]">
+                        <img src="{{ $productImageUrl }}" alt="{{ $product->name }}" width="900" height="900" loading="eager" fetchpriority="high" decoding="async" class="aspect-[4/3] w-full object-cover sm:aspect-square lg:aspect-[4/4.2]">
                         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/25 via-transparent to-transparent"></div>
                     @else
                         <div class="relative flex min-h-[320px] flex-col justify-between overflow-hidden bg-gradient-to-br {{ $product->accent ?: 'from-slate-900 to-teal-900' }} p-7 text-white sm:min-h-[460px] sm:p-8">

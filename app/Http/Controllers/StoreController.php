@@ -2,40 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Banner;
-use App\Models\Category;
 use App\Models\Product;
-use App\Models\Qna;
-use App\Models\Setting;
-use App\Models\Voucher;
-use App\Support\Money;
+use App\Models\Testimonial;
+use App\Services\PublicDataService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
+    public function __construct(private readonly PublicDataService $publicData)
+    {
+    }
+
     public function home(Request $request): View
     {
-        $products = $this->productQuery([
-                'query' => '',
-                'category' => 'all',
-                'sort' => 'popular',
-            ])
-            ->take(8)
-            ->get();
-
-        return view('pages.home', [
-            'banners' => Banner::where('is_active', true)->orderBy('sort_order')->get(),
-            'categories' => Category::where('is_active', true)->orderBy('sort_order')->get(),
-            'products' => $products,
-            'vouchers' => Voucher::with('products')->where('is_active', true)->latest()->get(),
+        return view('pages.home', array_merge($this->publicData->homeData(), [
             'filters' => [
                 'query' => '',
                 'category' => 'all',
                 'sort' => 'popular',
             ],
-            'cart' => $this->cartSummary(),
-            'settings' => Setting::store(),
+            'cart' => $this->publicData->cartSummary(),
+            'settings' => $this->publicData->settings(),
+        ]));
+    }
+
+    public function storeTestimonial(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:80'],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'message' => ['required', 'string', 'min:10', 'max:500'],
+        ], [
+            'name.required' => 'Nama customer wajib diisi.',
+            'name.max' => 'Nama customer maksimal 80 karakter.',
+            'rating.required' => 'Rating wajib dipilih.',
+            'rating.integer' => 'Rating tidak valid.',
+            'rating.min' => 'Rating minimal 1.',
+            'rating.max' => 'Rating maksimal 5.',
+            'message.required' => 'Isi testimoni wajib diisi.',
+            'message.min' => 'Isi testimoni minimal 10 karakter.',
+            'message.max' => 'Isi testimoni maksimal 500 karakter.',
+        ]);
+
+        Testimonial::create([
+            'name' => trim($validated['name']),
+            'message' => trim($validated['message']),
+            'rating' => (int) $validated['rating'],
+            'image_path' => null,
+            'is_active' => false,
+        ]);
+
+        return redirect(route('testimonials.index').'#form-testimoni')
+            ->with('success', 'Terima kasih, testimoni kamu sudah terkirim. Admin akan mengecek dulu sebelum ditampilkan.');
+    }
+
+    public function testimonials(): View
+    {
+        $testimonials = Testimonial::query()
+            ->where('is_active', true)
+            ->latest()
+            ->paginate(12);
+
+        return view('pages.testimonials', [
+            'testimonials' => $testimonials,
+            'testimonialSummary' => $this->publicData->testimonialSummary(),
+            'cart' => $this->publicData->cartSummary(),
+            'settings' => $this->publicData->settings(),
         ]);
     }
 
@@ -52,11 +86,11 @@ class StoreController extends Controller
             ->withQueryString();
 
         return view('pages.products', [
-            'categories' => Category::where('is_active', true)->orderBy('sort_order')->get(),
+            'categories' => $this->publicData->productCategories(),
             'products' => $products,
             'filters' => $filters,
-            'cart' => $this->cartSummary(),
-            'settings' => Setting::store(),
+            'cart' => $this->publicData->cartSummary(),
+            'settings' => $this->publicData->settings(),
         ]);
     }
 
@@ -91,48 +125,31 @@ class StoreController extends Controller
     public function guide(): View
     {
         return view('pages.guide', [
-            'cart' => $this->cartSummary(),
-            'settings' => Setting::store(),
+            'cart' => $this->publicData->cartSummary(),
+            'settings' => $this->publicData->settings(),
         ]);
     }
 
     public function qna(): View
     {
         return view('pages.qna', [
-            'qnas' => Qna::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get(),
-            'cart' => $this->cartSummary(),
-            'settings' => Setting::store(),
+            'qnas' => $this->publicData->qnas(),
+            'cart' => $this->publicData->cartSummary(),
+            'settings' => $this->publicData->settings(),
         ]);
     }
 
     public function product(string $slug): View
     {
-        $product = Product::with(['category', 'activeVariants'])->where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $product = $this->publicData->productDetail($slug);
+
+        abort_unless($product, 404);
 
         return view('products.show', [
             'product' => $product,
-            'related' => Product::with(['category', 'activeVariants'])
-                ->where('is_active', true)
-                ->where('category_id', $product->category_id)
-                ->whereKeyNot($product->id)
-                ->orderBy('sort_order')
-                ->take(3)
-                ->get(),
-            'cart' => $this->cartSummary(),
-            'settings' => Setting::store(),
+            'related' => $this->publicData->relatedProducts($product),
+            'cart' => $this->publicData->cartSummary(),
+            'settings' => $this->publicData->settings(),
         ]);
-    }
-
-    private function cartSummary(): array
-    {
-        $items = session('cart', []);
-        $subtotal = collect($items)->sum(fn ($item) => $item['price'] * $item['qty']);
-
-        return [
-            'items' => $items,
-            'count' => collect($items)->sum('qty'),
-            'subtotal' => $subtotal,
-            'subtotal_formatted' => Money::rupiah($subtotal),
-        ];
     }
 }

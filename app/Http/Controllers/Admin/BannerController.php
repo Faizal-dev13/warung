@@ -7,6 +7,9 @@ use App\Models\Banner;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Support\SortPositionManager;
+use App\Services\ImageOptimizationService;
 use Illuminate\View\View;
 
 class BannerController extends Controller
@@ -59,15 +62,23 @@ class BannerController extends Controller
 
     public function create(): View
     {
-        return view('admin.banners.form', ['banner' => new Banner()]);
+        return view('admin.banners.form', [
+            'banner' => new Banner(),
+            'nextSortOrder' => SortPositionManager::next(Banner::class),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $banner = new Banner();
-        $banner->forceFill($this->payload($request))->save();
+        DB::transaction(function () use ($request) {
+            $payload = $this->payload($request);
+            $payload['sort_order'] = SortPositionManager::makeRoomForCreate(Banner::class, $payload['sort_order'] ?? null);
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil ditambahkan.');
+            $banner = new Banner();
+            $banner->forceFill($payload)->save();
+        });
+
+        return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil ditambahkan. Posisi tampil banner lain sudah otomatis digeser.');
     }
 
     public function edit(Banner $banner): View
@@ -77,18 +88,29 @@ class BannerController extends Controller
 
     public function update(Request $request, Banner $banner): RedirectResponse
     {
-        $banner->forceFill($this->payload($request, $banner))->save();
+        DB::transaction(function () use ($request, $banner) {
+            $payload = $this->payload($request, $banner);
+            $payload['sort_order'] = SortPositionManager::move($banner, $payload['sort_order'] ?? null);
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil diperbarui.');
+            $banner->forceFill($payload)->save();
+        });
+
+        return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil diperbarui. Posisi tampil banner lain sudah otomatis disesuaikan.');
     }
 
     public function destroy(Banner $banner): RedirectResponse
     {
+        $position = (int) $banner->sort_order;
+
         $this->deletePublicFile($banner->image_path ?? null);
         $this->deletePublicFile($banner->mobile_image_path ?? null);
-        $banner->delete();
 
-        return back()->with('success', 'Banner berhasil dihapus.');
+        DB::transaction(function () use ($banner, $position) {
+            $banner->delete();
+            SortPositionManager::closeGap(Banner::class, $position);
+        });
+
+        return back()->with('success', 'Banner berhasil dihapus. Posisi tampil banner lain sudah dirapikan.');
     }
 
     private function payload(Request $request, ?Banner $banner = null): array
@@ -103,7 +125,7 @@ class BannerController extends Controller
             'mobile_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'remove_image' => ['nullable', 'boolean'],
             'remove_mobile_image' => ['nullable', 'boolean'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'sort_order' => ['nullable', 'integer', 'min:1'],
         ]);
 
         $imagePath = $banner->image_path ?? null;
@@ -121,12 +143,12 @@ class BannerController extends Controller
 
         if ($request->hasFile('image')) {
             $this->deletePublicFile($imagePath);
-            $imagePath = $request->file('image')->store('banners', 'public');
+            $imagePath = app(ImageOptimizationService::class)->storeWebp($request->file('image'), 'banners', 1600, 82);
         }
 
         if ($request->hasFile('mobile_image')) {
             $this->deletePublicFile($mobileImagePath);
-            $mobileImagePath = $request->file('mobile_image')->store('banners/mobile', 'public');
+            $mobileImagePath = app(ImageOptimizationService::class)->storeWebp($request->file('mobile_image'), 'banners/mobile', 900, 82);
         }
 
         return [
@@ -139,7 +161,7 @@ class BannerController extends Controller
             'mobile_image_path' => $mobileImagePath,
             'icon' => 'ph-image-square',
             'accent' => 'from-slate-950 to-teal-900',
-            'sort_order' => (int) ($data['sort_order'] ?? 0),
+            'sort_order' => $data['sort_order'] ?? null,
             'is_active' => $request->boolean('is_active'),
         ];
     }

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\ClearsPublicCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Qna extends Model
 {
+    use ClearsPublicCache;
     use HasFactory;
 
     protected $fillable = ['question', 'answer', 'is_active', 'sort_order'];

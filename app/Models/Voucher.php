@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\ClearsPublicCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Voucher extends Model
 {
+    use ClearsPublicCache;
     use HasFactory;
 
     protected $fillable = ['code', 'label', 'type', 'value', 'minimum_order', 'is_active', 'starts_at', 'ends_at'];

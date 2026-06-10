@@ -17,6 +17,21 @@ use Illuminate\Validation\ValidationException;
 
 class CartController extends Controller
 {
+
+    public function summary(Request $request): JsonResponse
+    {
+        $cart = $this->cartSummary();
+
+        return response()->json([
+            'ok' => true,
+            'cart' => [
+                'count' => $cart['count'],
+                'subtotal' => $cart['subtotal'],
+                'subtotal_formatted' => $cart['subtotal_formatted'],
+            ],
+            'html' => view('partials.cart-items', ['cart' => $cart])->render(),
+        ]);
+    }
     public function add(Request $request, string $slug): JsonResponse|RedirectResponse
     {
         $product = Product::with('activeVariants')->where('slug', $slug)->where('is_active', true)->firstOrFail();

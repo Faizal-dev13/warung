@@ -8,6 +8,9 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Support\SortPositionManager;
+use App\Services\ImageOptimizationService;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -71,15 +74,23 @@ class ProductController extends Controller
         return view('admin.products.form', [
             'product' => new Product(),
             'categories' => Category::where('is_active', true)->orderBy('name')->get(),
+            'nextSortOrder' => SortPositionManager::next(Product::class),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $product = new Product();
-        $product->forceFill($this->payload($request))->save();
+        $product = null;
 
-        return redirect()->route('admin.products.edit', $product)->with('success', 'Produk berhasil ditambahkan. Tambahkan varian jika produk memiliki pilihan paket atau durasi.');
+        DB::transaction(function () use ($request, &$product) {
+            $payload = $this->payload($request);
+            $payload['sort_order'] = SortPositionManager::makeRoomForCreate(Product::class, $payload['sort_order'] ?? null);
+
+            $product = new Product();
+            $product->forceFill($payload)->save();
+        });
+
+        return redirect()->route('admin.products.edit', $product)->with('success', 'Produk berhasil ditambahkan. Posisi tampil produk lain sudah otomatis digeser. Tambahkan varian jika produk memiliki pilihan paket atau durasi.');
     }
 
     public function edit(Product $product): View
@@ -92,17 +103,28 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product): RedirectResponse
     {
-        $product->forceFill($this->payload($request, $product))->save();
+        DB::transaction(function () use ($request, $product) {
+            $payload = $this->payload($request, $product);
+            $payload['sort_order'] = SortPositionManager::move($product, $payload['sort_order'] ?? null);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
+            $product->forceFill($payload)->save();
+        });
+
+        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui. Posisi tampil produk lain sudah otomatis disesuaikan.');
     }
 
     public function destroy(Product $product): RedirectResponse
     {
-        $this->deletePublicFile($product->image_path ?? null);
-        $product->delete();
+        $position = (int) $product->sort_order;
 
-        return back()->with('success', 'Produk berhasil dihapus.');
+        $this->deletePublicFile($product->image_path ?? null);
+
+        DB::transaction(function () use ($product, $position) {
+            $product->delete();
+            SortPositionManager::closeGap(Product::class, $position);
+        });
+
+        return back()->with('success', 'Produk berhasil dihapus. Posisi tampil produk lain sudah dirapikan.');
     }
 
     private function payload(Request $request, ?Product $product = null): array
@@ -118,7 +140,7 @@ class ProductController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
             'remove_image' => ['nullable', 'boolean'],
             'features' => ['nullable', 'string'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'sort_order' => ['nullable', 'integer', 'min:1'],
         ]);
 
         $imagePath = $product->image_path ?? null;
@@ -130,7 +152,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $this->deletePublicFile($imagePath);
-            $imagePath = $request->file('image')->store('products', 'public');
+            $imagePath = app(ImageOptimizationService::class)->storeWebp($request->file('image'), 'products', 1100, 82);
         }
 
         $features = collect(preg_split('/\r\n|\r|\n/', (string) ($data['features'] ?? '')))
@@ -155,7 +177,7 @@ class ProductController extends Controller
             'is_latest' => false,
             'is_featured' => false,
             'is_active' => $request->boolean('is_active'),
-            'sort_order' => (int) ($data['sort_order'] ?? 0),
+            'sort_order' => $data['sort_order'] ?? null,
         ];
     }
 

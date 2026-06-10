@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\ClearsPublicCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
@@ -11,6 +12,7 @@ use Throwable;
 
 class Setting extends Model
 {
+    use ClearsPublicCache;
     use HasFactory;
 
     protected $fillable = ['key', 'value', 'group'];

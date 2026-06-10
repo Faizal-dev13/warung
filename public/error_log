@@ -1,0 +1,85 @@
+[28-May-2026 09:10:54 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:10:54 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:01 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:01 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:18 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:18 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:18 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:18 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:37 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:37 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:56 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:56 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:58 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:11:58 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:10 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:10 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:17 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:17 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:23 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:23 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:31 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:31 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:48 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:48 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:49 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:49 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:55 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:55 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:57 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:12:57 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:13:05 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:13:05 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:13:06 Asia/Jakarta] PHP Warning:  require(/home/digx1572/public_html/warung/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/digx1572/public_html/warung/index.php on line 9
+[28-May-2026 09:13:06 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/digx1572/public_html/warung/../vendor/autoload.php' (include_path='.:/opt/alt/php83/usr/share/pear:/opt/alt/php83/usr/share/php:/usr/share/pear:/usr/share/php') in /home/digx1572/public_html/warung/index.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/digx1572/public_html/warung/index.php on line 9

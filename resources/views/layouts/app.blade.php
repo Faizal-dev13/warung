@@ -13,23 +13,40 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', $storeName)</title>
     <meta name="description" content="{{ $storeTagline }}">
-    <script src="https://cdn.tailwindcss.com"></script>
+    @php
+        $publicAssetBuildReady = file_exists(public_path('hot')) || file_exists(public_path('build/manifest.json'));
+    @endphp
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Poppins', 'ui-sans-serif', 'system-ui'] },
-                    boxShadow: { soft: '0 24px 80px rgba(15, 23, 42, .10)' }
+        (function () {
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                const theme = savedTheme || 'dark';
+                if (!savedTheme) localStorage.setItem('theme', 'dark');
+                document.documentElement.classList.toggle('dark', theme !== 'light');
+            } catch (error) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    @if($publicAssetBuildReady)
+        @vite(['resources/css/public.css', 'resources/js/public/app.js'])
+    @else
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        fontFamily: { sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'] },
+                        boxShadow: { soft: '0 24px 80px rgba(15, 23, 42, .10)' }
+                    }
                 }
             }
-        }
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="{{ asset('css/store.css') }}">
+        </script>
+        <link rel="stylesheet" href="{{ asset('css/store.css') }}">
+        <script defer src="{{ asset('js/public-store.js') }}"></script>
+    @endif
+    <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-white">
     @php
@@ -92,7 +109,7 @@
         @yield('content')
     </main>
 
-    <aside data-cart-panel class="fixed inset-x-0 bottom-0 z-[60] flex max-h-[94vh] w-full translate-y-full flex-col overflow-hidden rounded-t-[2rem] border-t border-slate-200 bg-white shadow-soft transition duration-300 dark:border-slate-800 dark:bg-slate-950 sm:inset-x-auto sm:inset-y-0 sm:left-auto sm:right-0 sm:max-h-none sm:max-w-md sm:translate-x-full sm:translate-y-0 sm:rounded-none sm:border-l sm:border-t-0" aria-label="Panel checkout">
+    <aside data-cart-panel data-cart-summary-url="{{ route('cart.summary') }}" class="fixed inset-x-0 bottom-0 z-[60] flex max-h-[94vh] w-full translate-y-full flex-col overflow-hidden rounded-t-[2rem] border-t border-slate-200 bg-white shadow-soft transition duration-300 dark:border-slate-800 dark:bg-slate-950 sm:inset-x-auto sm:inset-y-0 sm:left-auto sm:right-0 sm:max-h-none sm:max-w-md sm:translate-x-full sm:translate-y-0 sm:rounded-none sm:border-l sm:border-t-0" aria-label="Panel checkout">
         <div class="shrink-0 border-b border-slate-200 bg-white px-5 pb-4 pt-3 dark:border-slate-800 dark:bg-slate-950 sm:pt-5">
             <div class="mx-auto mb-3 h-1.5 w-12 rounded-full bg-slate-200 dark:bg-slate-700 sm:hidden"></div>
             <div class="flex items-center justify-between gap-4">
@@ -108,8 +125,10 @@
         </div>
 
         <div class="admin-scrollbar flex-1 overflow-y-auto bg-slate-50/80 dark:bg-slate-950">
-            <div data-cart-items class="p-4 pb-3 sm:p-5 sm:pb-4">
-                @include('partials.cart-items', ['cart' => $cart])
+            <div data-cart-items data-cart-loaded="false" class="p-4 pb-3 sm:p-5 sm:pb-4">
+                <div class="rounded-3xl border border-dashed border-slate-200 bg-white/70 p-5 text-center text-sm font-bold text-slate-500 dark:border-slate-800 dark:bg-white/5 dark:text-slate-400">
+                    Klik tombol keranjang untuk memuat ringkasan pesanan.
+                </div>
             </div>
 
             <div class="border-t border-slate-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] dark:border-slate-800 dark:bg-slate-950 sm:p-5">
@@ -153,180 +172,6 @@
     <div data-cart-overlay class="pointer-events-none fixed inset-0 z-[55] bg-slate-950/0 transition duration-300"></div>
 
 
-    <script src="{{ asset('js/store.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-            const panel = document.querySelector('[data-cart-panel]');
-            const overlay = document.querySelector('[data-cart-overlay]');
-            const cartItemsTarget = document.querySelector('[data-cart-items]');
-            const subtotalTarget = document.querySelector('[data-cart-subtotal]');
-            const toast = document.querySelector('[data-cart-toast]');
-            const toastMessage = document.querySelector('[data-cart-toast-message]');
-            const voucherInput = document.querySelector('[data-voucher-input]');
-            const checkoutTotalTarget = document.querySelector('[data-checkout-total]');
-            const voucherFeedback = document.querySelector('[data-voucher-feedback]');
-            let toastTimer;
-            let voucherTimer;
-
-            const openCart = () => {
-                if (!panel || !overlay) return;
-                panel.classList.remove('translate-x-full', 'translate-y-full', 'sm:translate-x-full');
-                overlay.classList.remove('pointer-events-none', 'bg-slate-950/0');
-                overlay.classList.add('bg-slate-950/45');
-                document.documentElement.classList.add('overflow-hidden');
-            };
-
-            const closeCart = () => {
-                if (!panel || !overlay) return;
-                panel.classList.remove('translate-x-full');
-                panel.classList.add('translate-y-full', 'sm:translate-x-full');
-                overlay.classList.add('pointer-events-none', 'bg-slate-950/0');
-                overlay.classList.remove('bg-slate-950/45');
-                document.documentElement.classList.remove('overflow-hidden');
-            };
-
-            const showToast = (message, type = 'success') => {
-                if (!toast || !toastMessage) return;
-                toastMessage.textContent = message || 'Keranjang diperbarui.';
-                toast.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
-                toast.classList.add(type === 'error' ? 'text-rose-600' : 'text-emerald-600');
-                window.clearTimeout(toastTimer);
-                toastTimer = window.setTimeout(() => toast.classList.add('hidden'), 2400);
-            };
-
-            const updateBadges = (count) => {
-                document.querySelectorAll('[data-cart-count-badge]').forEach((badge) => {
-                    badge.textContent = count;
-                    badge.classList.toggle('hidden', Number(count) <= 0);
-                });
-            };
-
-            const setSubmitting = (form, isSubmitting) => {
-                const buttons = form.querySelectorAll('button');
-                buttons.forEach((button) => {
-                    button.disabled = isSubmitting;
-                    if (isSubmitting) {
-                        button.dataset.originalHtml = button.innerHTML;
-                        button.innerHTML = '<i class="ph ph-spinner-gap animate-spin"></i><span class="hidden sm:inline">Memproses</span>';
-                    } else if (button.dataset.originalHtml) {
-                        button.innerHTML = button.dataset.originalHtml;
-                        delete button.dataset.originalHtml;
-                    }
-                });
-            };
-
-            const resetVoucherPreview = () => {
-                if (checkoutTotalTarget && subtotalTarget) {
-                    checkoutTotalTarget.textContent = subtotalTarget.textContent;
-                }
-                if (voucherFeedback) {
-                    voucherFeedback.textContent = '';
-                    voucherFeedback.classList.add('hidden');
-                    voucherFeedback.classList.remove('text-rose-600', 'dark:text-rose-300');
-                    voucherFeedback.classList.add('text-emerald-700', 'dark:text-emerald-300');
-                }
-            };
-
-            const refreshVoucherPreview = async () => {
-                if (!voucherInput) return;
-
-                const code = voucherInput.value.trim();
-                if (!code) {
-                    resetVoucherPreview();
-                    return;
-                }
-
-                try {
-                    const formData = new FormData();
-                    formData.append('voucher', code);
-
-                    const response = await fetch(voucherInput.dataset.voucherPreviewUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                        body: formData,
-                    });
-
-                    const data = await response.json();
-
-                    if (checkoutTotalTarget && data.total_formatted) {
-                        checkoutTotalTarget.textContent = data.total_formatted;
-                    }
-
-                    if (voucherFeedback) {
-                        voucherFeedback.textContent = data.ok
-                            ? `${data.message} Hemat ${data.discount_formatted}.`
-                            : (data.message || 'Voucher belum bisa digunakan.');
-                        voucherFeedback.classList.remove('hidden', 'text-emerald-700', 'dark:text-emerald-300', 'text-rose-600', 'dark:text-rose-300');
-                        voucherFeedback.classList.add(data.ok ? 'text-emerald-700' : 'text-rose-600', data.ok ? 'dark:text-emerald-300' : 'dark:text-rose-300');
-                    }
-                } catch (error) {
-                    resetVoucherPreview();
-                }
-            };
-
-            voucherInput?.addEventListener('input', () => {
-                window.clearTimeout(voucherTimer);
-                voucherTimer = window.setTimeout(refreshVoucherPreview, 350);
-            });
-
-            document.querySelectorAll('[data-cart-toggle]').forEach((button) => button.addEventListener('click', openCart));
-            document.querySelectorAll('[data-cart-close]').forEach((button) => button.addEventListener('click', closeCart));
-            overlay?.addEventListener('click', closeCart);
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape') closeCart();
-            });
-
-            document.addEventListener('submit', async (event) => {
-                const form = event.target.closest('[data-cart-form]');
-                if (!form) return;
-
-                event.preventDefault();
-                setSubmitting(form, true);
-
-                try {
-                    const response = await fetch(form.action, {
-                        method: form.method || 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                        body: new FormData(form),
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok || !data.ok) {
-                        throw new Error(data.message || 'Keranjang belum bisa diperbarui.');
-                    }
-
-                    if (cartItemsTarget && typeof data.html === 'string') {
-                        cartItemsTarget.innerHTML = data.html;
-                    }
-
-                    if (subtotalTarget && data.cart?.subtotal_formatted) {
-                        subtotalTarget.textContent = data.cart.subtotal_formatted;
-                    }
-
-                    updateBadges(data.cart?.count || 0);
-                    await refreshVoucherPreview();
-                    showToast(data.message || 'Keranjang diperbarui.');
-
-                    if (form.matches('[data-cart-open="true"]')) {
-                        openCart();
-                    }
-                } catch (error) {
-                    showToast(error.message || 'Terjadi kesalahan. Coba lagi.', 'error');
-                } finally {
-                    setSubmitting(form, false);
-                }
-            });
-        });
-    </script>
+    @stack('scripts')
 </body>
 </html>
